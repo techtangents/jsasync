@@ -2,7 +2,7 @@
     var global = (function() { return this; })();
     global.techtangents = global.techtangents || {};
 
-    global.techtangents.async = (function() {
+    global.techtangents.jsasync = (function() {
 
         function flip(f) {
             return function(a, b) {
