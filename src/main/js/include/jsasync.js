@@ -68,6 +68,17 @@
                 };
                 me[">>="] = me.bind;
 
+                /** bindAnon :: this Future a -> Future b -> Future b
+                 *  Note: (this Future a) is strict - it is evaluated and the result discarded.
+                 *  This allows side effects to be chained.
+                 */
+                me.bindAnon = function(futureB) {
+                    return me.bind(function(_) {
+                        return futureB;
+                    });
+                };
+                me[">>"] = me.bindAnon;
+
                 return me;
             };
 
