@@ -1,0 +1,1 @@
+require("../../main/js/AsyncMonad.js");

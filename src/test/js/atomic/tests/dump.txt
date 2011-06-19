@@ -1,0 +1,50 @@
+/*
+
+Concepts:
+
+Async function:
+two functions
+
+var f = function(a, callback) {
+    var b = ...;
+    callback(b);
+}
+
+Async doodad:
+Use "async" to convert an async function to an Async doodad.
+Async doodads are functions and objects.
+
+Async a b = a -> Future b
+
+// async :: (a, b -> ()) -> () -> Async a b
+var af = Async.async(f);
+
+// invoking as function - Asyncs are in curried form.
+af(a)(callback);
+
+// partially applying returns a future. Futures are functions and Monads.
+// apply :: this Async a b -> a -> Future b
+var future1 = af(a);
+
+// map :: Async a b -> (b -> c) -> Async a c
+var ag = af.map(function(b) {
+    var c = ...;
+    return c;
+});
+
+// bind :: Async a b -> (b -> Async c d) -> Async a d
+var ag = af.bind(function(b) {
+    return Async.async(function(c, callback) {
+        var d = ...;
+        callback(d);
+    });
+});
+
+// compose :: Async a b -> Async b c -> Async a c
+
+
+
+
+
+
+
