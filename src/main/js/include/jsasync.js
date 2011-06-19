@@ -48,7 +48,8 @@
                 me.map = function(mapper) {
                     return future(function(callback) {
                         f(function(a) {
-                            callback(mapper(b));
+                            var b = mapper(a);
+                            callback(b);
                         });
                     });
                 };
@@ -59,18 +60,28 @@
                  */
                 me.bind = function(aToFutureB) {
                     return future(function(callback) {
-                        var a = me();
-                        var futureB = aToFutureB(a);
-                        futureB(callback);
+                        me(function(a) {
+                            var futureB = aToFutureB(a);
+                            futureB(callback);
+                        });
                     });
                 };
                 me[">>="] = me.bind;
+
+                return me;
+            };
+
+            var constant = function(x) {
+                return future(function(callback) {
+                    callback(x);
+                });
             };
 
             return {
-                future: future
-            }
-        });
+                future: future,
+                constant: constant
+            };
+        })();
 
 
         /**
@@ -127,6 +138,7 @@
                         });
                     });
                 };
+                me["<$>"] = me.map;
 
                 /** "Normal" Right-to-Left composition:  f . g == \x -> f(g(x))
                  *  In a standard function, this would be: compose(f, g)(x) == f(g(x));
@@ -151,7 +163,7 @@
                  *  also chain(f, g) = g(f(x))
                  *  composeRight :: this Async b c -> Async a b -> Async a c
                  */
-                var composeLtr = flip(composeRight);
+                var composeL = flip(composeR);
 
                 /** composeR :: this Async a b -> Async b c -> Async a c */
                 me.composeR = function(other) {
@@ -166,19 +178,18 @@
                  *  var asyncAd = ab.compose(bc).compose(cd);
                  */
                 me.composeL = function(other) {
-                    return compose(me, other);
+                    return composeL(me, other);
                 };
                 me.chain = me.composeL;
                 me[">>>"] = me.composeL;
 
-                me.kleisliL
-
+                return me;
             };
 
             return {
                 async: async
             };
-        });
+        })();
 
         return {
             Async: Async,

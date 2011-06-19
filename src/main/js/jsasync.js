@@ -1,3 +1,3 @@
-Ephox.core.module.define("AsyncMonad", [
+Ephox.core.include.require("jsasync", [
     "include/jsasync.js"
 ]);
