@@ -1,3 +1,5 @@
 Ephox.core.include.require("jsasync", [
-    "include/jsasync.js"
+    "include/Util.js",
+    "include/Future.js",
+    "include/Async.js"
 ]);

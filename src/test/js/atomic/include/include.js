@@ -1,4 +1,6 @@
-[   "../../../../main/js/jsasync.js",
+[
+    "../../../../../lib/run/javascriptcore.js",
+    "../../../../main/js/jsasync.js",
     "../../../../../lib/test/json2.js",
     "../../../../../lib/test/jssert.js",
     "imports.js",
