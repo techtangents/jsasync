@@ -1,1 +1,5 @@
 *.iws
+dist
+scratch
+dependency
+lib
