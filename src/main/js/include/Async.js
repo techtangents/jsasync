@@ -1,6 +1,6 @@
 Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
 
-    var flip = techtangents.jsasync.Util.flip;
+    var Util = techtangents.jsasync.Util;
 
     /** async :: (a -> (b -> ()) -> a -> Async a b
      *  Creates an Async from an asynchronous function(a, callback)
@@ -53,7 +53,7 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
          *  also chain(f, g) = g(f(x))
          *  composeRight :: this Async b c -> Async a b -> Async a c
          */
-        var composeL = flip(composeR);
+        var composeL = Util.flip(composeR);
 
         /** composeR :: this Async a b -> Async b c -> Async a c */
         me.composeR = function(other) {
@@ -85,7 +85,7 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
 
     /** constant :: b -> Async a b */
     var constant = function(x) {
-        return sync(identity_(x));
+        return sync(Util.konst(x));
     };
 
     api.async = async;

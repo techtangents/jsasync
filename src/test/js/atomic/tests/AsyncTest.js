@@ -33,3 +33,11 @@ var testMapIn = function() {
     check("mapIn");
     check("<<^");
 };
+
+var testConstant = function() {
+    permute2(someValues, function(c, ignored) {
+        withSpy(function() {
+            return Async.constant(c)(ignored);
+        }, [[c]]);
+    });
+};

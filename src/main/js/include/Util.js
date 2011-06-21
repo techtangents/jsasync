@@ -11,17 +11,13 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
         };
     }
 
-    function identity(x) {
-        return x;
-    }
-
-    function identity_(x) {
-        return function() {
-            return identity(x);
+    function konst(x) {
+        return function(_) {
+            return x;
         };
     }
 
     api.flip = flip;
     api.wrap = wrap;
-    api.identity = identity;
+    api.konst = konst;
 });
