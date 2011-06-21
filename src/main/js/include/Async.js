@@ -76,6 +76,20 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
         return me;
     };
 
+    /** sync :: (a -> b) ->  */
+    var sync = function(f) {
+        return async(function(a, callback) {
+            callback(f(a));
+        });
+    };
+
+    /** constant :: b -> Async a b */
+    var constant = function(x) {
+        return sync(identity_(x));
+    };
+
     api.async = async;
+    api.sync = sync;
+    api.constant = constant;
 
 });
