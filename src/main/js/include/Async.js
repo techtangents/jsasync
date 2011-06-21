@@ -1,6 +1,7 @@
 Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
 
     var Util = techtangents.jsasync.Util;
+    var Future = techtangents.jsasync.Future;
 
     /** async :: (a -> (b -> ()) -> a -> Async a b
      *  Creates an Async from an asynchronous function(a, callback)
@@ -73,10 +74,18 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
         me.chain = me.composeL;
         me[">>>"] = me.composeL;
 
+        /** Returns a Future that performs this Async over each element of the input array.
+         *  amap :: this Async a b -> [a] -> Future [b]
+         */
+        me.amap = function(input) {
+            var futures = Util.arrayMap(input, me);
+            return Future.par(futures);
+        };
+
         return me;
     };
 
-    /** sync :: (a -> b) ->  */
+    /** sync :: (a -> b) -> Async a b */
     var sync = function(f) {
         return async(function(a, callback) {
             callback(f(a));
