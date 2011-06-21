@@ -20,7 +20,7 @@ var testCompose = function() {
 
 var testMap = function() {
     var spy = jssert.spy();
-    var fn = (plus1) ["<$>"] (function(a) { return a + 2; });
+    var fn = plus1.mapOut(function(a) { return a + 2; });
     fn(1)(spy);
     spy.verifyArgs([[4]]);
 };

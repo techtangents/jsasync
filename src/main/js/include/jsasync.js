@@ -82,6 +82,7 @@
                 return me;
             };
 
+            /** constant :: a -> Future a */
             var constant = function(x) {
                 return future(function(callback) {
                     callback(x);
@@ -138,18 +139,23 @@
                     });
                 };
 
-                /** map :: this Async a b -> (b -> c) -> Async a c
-                 *  Not your average 'map' function. Maps a function over the output.
-                 */
-                me.map = function(mapper) {
+                /** mapIn :: this Async b c -> (a -> b) -> Async a c */
+                me.mapIn = function(mapper) {
+                    return Async.async(function(b, callback) {
+                        me(mapper(b))(callback);
+                    });
+                };
+                me["<<^"] = me.mapIn;
+
+                /** mapOut :: this Async a b -> (b -> c) -> Async a c */
+                me.mapOut = function(mapper) {
                     return Async.async(function(a, callback) {
                         me(a)(function(b) {
-                            var c = mapper(b);
-                            callback(c);
+                            callback(mapper(b));
                         });
                     });
                 };
-                me["<$>"] = me.map;
+                me[">>^"] = me.mapOut;
 
                 /** "Normal" Right-to-Left composition:  f . g == \x -> f(g(x))
                  *  In a standard function, this would be: compose(f, g)(x) == f(g(x));
