@@ -28,3 +28,14 @@ var testMapOut = function() {
     check("mapOut");
     check(">>^");
 };
+
+var testMapIn = function() {
+    var check = function(fnName) {
+        var spy = jssert.spy();
+        var fn = plus1[fnName](function(a) { return Number(a); });
+        fn("1")(spy);
+        spy.verifyArgs([[2]]);
+    };
+    check("mapIn");
+    check("<<^");
+};
