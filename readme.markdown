@@ -11,7 +11,7 @@ augmented onto the Async and Future objects.
 Async
 -----
 
-An Async represents an asynchronous computation. It is an augmented function and forms a category.
+An Async represents an asynchronous computation. It is an augmented function and forms an arrow.
 The typical use case is to convert an asynchronous function to an Async.
 The asynchronous function is of two arguments: (a, callback) and this is converted to an Async, which is an
 equivalent function in curried form: (a)(callback).
@@ -19,7 +19,7 @@ equivalent function in curried form: (a)(callback).
 You invoke an Async with a value 'a' to get a Future, which is also an augmented function.
 Invoke the Future with a callback, and the callback is invoked with the result.
 
-Both the Async and the Future are functions augmented with category and monad capabilities respectively,
+Both the Async and the Future are functions augmented with arrow and monad capabilities respectively,
 in order to facilitate composition.
 
 As a function, an Async is:       a -> Future b
