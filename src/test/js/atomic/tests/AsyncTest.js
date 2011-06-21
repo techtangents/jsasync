@@ -18,9 +18,13 @@ var testCompose = function() {
     spy.verifyArgs([["4"]]);
 };
 
-var testMap = function() {
-    var spy = jssert.spy();
-    var fn = plus1.mapOut(function(a) { return a + 2; });
-    fn(1)(spy);
-    spy.verifyArgs([[4]]);
+var testMapOut = function() {
+    var check = function(fnName) {
+        var spy = jssert.spy();
+        var fn = plus1[fnName](function(a) { return a + 2; });
+        fn(1)(spy);
+        spy.verifyArgs([[4]]);
+    };
+    check("mapOut");
+    check(">>^");
 };
