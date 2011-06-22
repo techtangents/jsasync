@@ -1,12 +1,10 @@
-require("../include/include.js");
+require("../../include/include.js");
 
 // TODO: this drives out a varargs bind, e.g. futureA.bindn(sz, suffixQ), or perhaps >>= could just take varargs?
 var testBind = function() {
-    var spy = jssert.spy();
-    var futureA = plus1(5);
-    var futureB = (futureA) [">>="] (sz) [">>="] (suffixQ);
-    futureB(spy);
-    spy.verifyArgs([["6q"]]);
+    withSpy(function() {
+        return plus1(5) [">>="] (sz) [">>="] (suffixQ);
+    }, [["6q"]]);
 };
 
 var testAnonBind = function() {
@@ -40,11 +38,3 @@ var testConstant = function() {
     });
 };
 
-var testParOverConstant = function() {
-    testArrays.forEach(function(array) {
-        withSpy(function() {
-            var futures = array.map(Future.constant);
-            return Future.par(futures);
-        }, [[array]]);
-    });
-};

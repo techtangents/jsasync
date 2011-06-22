@@ -1,10 +1,9 @@
-require("../include/include.js");
+require("../../include/include.js");
 
 /* Note: these tests are actually synchronous, but still test the callback mechanism.
  * If we start bouncing the functions with setTimeout, these tests will break.
  * In this instance, perhaps mock out setTimeout, or use Java threading from Rhino.
  */
-
 
 var testInvoke = testWithSpy(function() {
     return sz(3);
