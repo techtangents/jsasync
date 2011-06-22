@@ -10,7 +10,13 @@ var suffixQ = Async.async(function(a, callback) {
     callback(a + "q")
 });
 
-var someValues = [null, undefined, [], {}, 0, -1, 1, 2, [1], "a", "", "b", function(){}];
+var arrayUnital = function(x) { return [x]; }
+
+var testValues = [null, undefined, [], {}, 0, -1, 1, 2, [1], "a", "", "b", function(){}];
+var testArrays = testValues.map(arrayUnital).concat([
+    [], [[]], [[[]]], [[[[]]]], [1, [2], [[3]]], [1, 2, 3, 4], testValues, ['a', 'b', 'c', 'd']
+]);
+
 
 var permute2 = function(input, f) {
     input.forEach(function(a) {

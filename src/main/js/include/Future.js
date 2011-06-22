@@ -1,7 +1,7 @@
 Ephox.core.module.define("techtangents.jsasync.Future", [], function(api) {
 
     var Util = techtangents.jsasync.Util;
-    var ticker = techtangents.jsasync.Ticker;
+    var Ticker = techtangents.jsasync.Ticker;
 
     /** Creates a Future, given a function that takes a callback as its only argument.
      *

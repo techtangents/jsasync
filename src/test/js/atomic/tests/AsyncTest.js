@@ -35,7 +35,7 @@ var testMapIn = function() {
 };
 
 var testConstant = function() {
-    permute2(someValues, function(c, ignored) {
+    permute2(testValues, function(c, ignored) {
         withSpy(function() {
             return Async.constant(c)(ignored);
         }, [[c]]);

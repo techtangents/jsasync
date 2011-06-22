@@ -33,9 +33,18 @@ var testMap = function() {
 };
 
 var testConstant = function() {
-    someValues.forEach(function(x) {
+    testValues.forEach(function(x) {
         withSpy(function() {
             return Future.constant(x);
         }, [[x]])
+    });
+};
+
+var testParOverConstant = function() {
+    testArrays.forEach(function(array) {
+        withSpy(function() {
+            var futures = array.map(Future.constant);
+            return Future.par(futures);
+        }, [[array]]);
     });
 };
