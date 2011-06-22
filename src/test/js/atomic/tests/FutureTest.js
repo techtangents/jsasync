@@ -31,3 +31,11 @@ var testMap = function() {
     futureA(spy);
     spy.verifyArgs([[5]]);
 };
+
+var testConstant = function() {
+    someValues.forEach(function(x) {
+        withSpy(function() {
+            return Future.constant(x);
+        }, [[x]])
+    });
+};
