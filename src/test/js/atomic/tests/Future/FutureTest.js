@@ -27,7 +27,7 @@ var testAnonBind = function() {
 };
 
 var testMap = function() {
-    testValues.forEach(function(v) {
+    testInts.forEach(function(v) {
         withSpy(function() {
             return Future.constant(v) ["<$>"] (function(x) { return x + 2; })
         }, [[v + 2]]);

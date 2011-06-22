@@ -42,9 +42,18 @@ var testConstant = function() {
 };
 
 var testAmap = function() {
-    testArrays.forEach(function(array) {
-        withSpy(function() {
-            return Async.sync(function(x) { return x; }).amap(array);
-        }, [[array]]);
+    var fns = [
+        function(x) { return x; },
+        function(x) { return 2; },
+        function(x) { return [x]; },
+        function(x) { return {a: x, b: [x]}; }
+    ];
+
+    fns.forEach(function(f) {
+        testArrays.forEach(function(array) {
+            withSpy(function() {
+                return Async.sync(f).amap(array);
+            }, [[array.map(f)]]);
+        });
     });
 };
