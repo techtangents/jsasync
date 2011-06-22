@@ -1,4 +1,3 @@
-// TODO: this would make a good driver for creating an Async from a synchronous function
 var sz = Async.async(function(a, callback) {
     callback(String(a));
 });
