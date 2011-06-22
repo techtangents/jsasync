@@ -1,5 +1,10 @@
 Ephox.core.module.define("techtangents.jsasync.Future", [], function(api) {
 
+    /** data Future = Future { apply :: (b -> ()) -> () }
+     *  A Future represents the future result of an asnchronous computation.
+     *  A Future is an augmented function and a monad
+     */
+
     var Util = techtangents.jsasync.Util;
     var Ticker = techtangents.jsasync.Ticker;
 

@@ -1,5 +1,9 @@
 Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
 
+    /** data Async = Async { apply :: a -> (b -> ()) -> () }
+     *  An Async represents an asynchronous computation. It is an augmented function and forms an arrow.
+     */
+
     var Util = techtangents.jsasync.Util;
     var Future = techtangents.jsasync.Future;
 
