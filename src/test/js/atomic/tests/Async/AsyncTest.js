@@ -40,3 +40,11 @@ var testConstant = function() {
         }, [[c]]);
     });
 };
+
+var testAmap = function() {
+    testArrays.forEach(function(array) {
+        withSpy(function() {
+            return Async.sync(function(x) { return x; }).amap(array);
+        }, [[array]]);
+    });
+};
