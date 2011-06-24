@@ -24,12 +24,30 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
 
         var me = function(passCallback, failCallback) {
             fut(function(either) {
-                either.fold(passCallback, failCallback)
+                either.fold(passCallback, failCallback);
+            });
+        };
+
+        /** this Bfuture p f -> p -> Bfuture p' f */
+        me.bind = function(binder) {
+            return bfuture(function(passCb, failCb) {
+                me(function(p) {
+                    binder(p)(passCb, failCb);
+                }, function(f) {
+                    failCb(f);
+                });
             });
         };
 
         return me;
     };
 
+    var constant = function(a) {
+        return bfuture(function(passCb, failCb) {
+            passCb(a);
+        });
+    };
+
+    api.constant = constant;
     api.bfuture = bfuture;
 });

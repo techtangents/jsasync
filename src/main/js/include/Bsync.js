@@ -48,7 +48,14 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
         ifFail(a);
     });
 
+    var sync = function(f) {
+        return bsync(function(a, ifPass, ifFail) {
+            ifPass(f(a));
+        });
+    };
+
     api.bsync = bsync;
+    api.sync = sync;
     api.identity = identity;
     api.faildentity = faildentity;
 });
