@@ -15,3 +15,31 @@ function testFaildentity() {
         spy.verifyArgs([[x]]);
     });
 }
+
+function testPass() {
+    testFnsFromInt.forEach(function(f) {
+        testInts.forEach(function(input) {
+            var bs = Bsync.bsync(function(a, passCb, failCb) {
+                passCb(f(a));
+            });
+            var spy = jssert.spy();
+            bs(input)(spy, explode);
+            var expected = f(input)
+            spy.verifyArgs([[expected]]);
+        });
+   });
+}
+
+function testFail() {
+    testFnsFromInt.forEach(function(f) {
+        testInts.forEach(function(input) {
+            var bs = Bsync.bsync(function(a, passCb, failCb) {
+                failCb(f(a));
+            });
+            var spy = jssert.spy();
+            bs(input)(explode, spy);
+            var expected = f(input)
+            spy.verifyArgs([[expected]]);
+        });
+   });
+}
