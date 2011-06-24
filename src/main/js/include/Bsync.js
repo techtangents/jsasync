@@ -12,6 +12,10 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     var Util = techtangents.jsasync.Util;
     var Async = techtangents.jsasync.Async;
     var Either = techtangents.jsasync.Either;
+    var Bfuture = techtangents.jsasync.Bfuture;
+
+    var curry1 = Util.curry1;
+    var compose = Util.compose;
 
     // FIX: test!
     // FIX: Figure out what type classes this should implement
@@ -21,17 +25,13 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
 
         // A Bsync is implemented in terms of an Async (Either p f)
         var asy = Async.async(function(a, callback) {
-            f(a, function(p) {
-                callback(Either.good(p));
-            }, function(f) {
-                callback(Either.bad(f));
-            });
+            var doCb = curry1(compose, callback);
+            f(a, doCb(Either.good), doCb(Either.bad));
         });
 
         var me = function(a) {
-            var afut = asy(a);
             return Bfuture.bfuture(function(passCallback, failCallback) {
-                afut(a)(function(either) {
+                asy(a)(function(either) {
                     either.fold(passCallback, failCallback);
                 });
             });
@@ -40,6 +40,16 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
         return me;
     };
 
+    var identity = bsync(function(a, ifPass, ifFail) {
+        ifPass(a);
+    });
+
+    var faildentity = bsync(function(a, ifPass, ifFail) {
+        ifFail(a);
+    });
+
     api.bsync = bsync;
+    api.identity = identity;
+    api.faildentity = faildentity;
 });
 

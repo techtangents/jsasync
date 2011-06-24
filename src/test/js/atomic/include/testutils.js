@@ -9,3 +9,5 @@ var testWithSpy = function(fn, expectedArgs) {
         withSpy(fn, expectedArgs);
     };
 };
+
+var explode = function() { throw "kaboom!"; };

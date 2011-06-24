@@ -5,6 +5,8 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
      *  When the computation is complete, one of the callbacks is called, depdending on the result.
     */
 
+    var Either = techtangents.jsasync.Either;
+
     // FIX: test!
     // FIX: Figure out what type classes this should implement
 

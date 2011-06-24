@@ -31,9 +31,26 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
         }
     }
 
+    function compose(f, g) {
+        return function(x) {
+            return f(g(x));
+        };
+    }
+
+    var chain = flip(compose);
+
+    var curry1 = function(f, a) {
+        return function(b) {
+            return f(a, b);
+        };
+    };
+
     api.flip = flip;
     api.wrap = wrap;
     api.konst = konst;
     api.arrayMap = arrayMap;
     api.arrayEach = arrayEach;
+    api.compose = compose;
+    api.chain = chain;
+    api.curry1 = curry1;
 });
