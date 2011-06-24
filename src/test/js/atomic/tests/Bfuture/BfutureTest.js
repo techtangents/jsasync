@@ -12,7 +12,14 @@ function testBindPassPass() {
 }
 
 function testBindFail() {
-    // TODO
+    testFnsFromInt.forEach(function(f) {
+        testInts.forEach(function(input) {
+            var spy = jssert.spy();
+            Bfuture.constantFail(input).bind(Bsync.sync(f))(explode, spy);
+            spy.verifyArgs([[input]]);
+        });
+    });
+
 }
 
 function testBindPassFail() {

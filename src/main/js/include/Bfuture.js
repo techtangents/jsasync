@@ -48,6 +48,13 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
         });
     };
 
+    var constantFail = function(a) {
+        return bfuture(function(passCb, failCb) {
+            failCb(a);
+        });
+    }
+
     api.constant = constant;
+    api.constantFail = constantFail;
     api.bfuture = bfuture;
 });
