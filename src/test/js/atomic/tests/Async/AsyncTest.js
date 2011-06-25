@@ -46,14 +46,7 @@ var testConstant = function() {
 };
 
 var testAmap = function() {
-    var fns = [
-        function(x) { return x; },
-        function(x) { return 2; },
-        function(x) { return [x]; },
-        function(x) { return {a: x, b: [x]}; }
-    ];
-
-    forEach2WithSpy(fns, testArrays, function(f, array, spy) {
+    forEach2WithSpy(testFunctions, testArrays, function(f, array, spy) {
         Async.sync(f).amap(array)(spy);
         spy.verifyArgs([[array.map(f)]]);
     });

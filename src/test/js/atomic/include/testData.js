@@ -18,13 +18,20 @@ var testArrays = testValues.map(arrayUnital).concat([
 ]);
 var testInts = [-1000, -50, -49, -100, -10, -3, -2, -1, 0, 1, 2, 3, 4, 10, 11, 99, 100, 1000, 10000, 1012413];
 
-var testFnsFromInt = [
+var testFunctionsFromInt = [
     function(a) { return a + 2; },
     function(a) { return String(a); },
     function(a) { return a; },
     function(a) { return undefined; },
     function(a) { return null; },
     function(a) { return [a, a]; }
+];
+
+var testFunctions = [
+    function(x) { return x; },
+    function(x) { return 2; },
+    function(x) { return [x]; },
+    function(x) { return {a: x, b: [x]}; }
 ];
 
 var permute2 = function(input, f) {

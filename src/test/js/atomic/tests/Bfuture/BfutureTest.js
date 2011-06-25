@@ -1,7 +1,7 @@
 require("../../include/include.js");
 
 function testBindPassPass() {
-    forEach2WithSpy(testFnsFromInt, testInts, function(f, input, spy) {
+    forEach2WithSpy(testFunctionsFromInt, testInts, function(f, input, spy) {
         Bfuture.constant(input).bind(Bsync.sync(f))(spy, explode);
         var expected = f(input);
         spy.verifyArgs([[expected]]);

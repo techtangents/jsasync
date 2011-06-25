@@ -17,7 +17,7 @@ function testFaildentity() {
 }
 
 function testPass() {
-    testFnsFromInt.forEach(function(f) {
+    testFunctionsFromInt.forEach(function(f) {
         testInts.forEach(function(input) {
             var bs = Bsync.bsync(function(a, passCb, failCb) {
                 passCb(f(a));
@@ -31,7 +31,7 @@ function testPass() {
 }
 
 function testFail() {
-    testFnsFromInt.forEach(function(f) {
+    testFunctionsFromInt.forEach(function(f) {
         testInts.forEach(function(input) {
             var bs = Bsync.bsync(function(a, passCb, failCb) {
                 failCb(f(a));
