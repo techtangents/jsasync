@@ -36,7 +36,6 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
         ifPass(a);
     });
 
-    // FIX this seems weird... is it correct? useful?
     var faildentity = bsync(function(a, _, ifFail) {
         ifFail(a);
     });
