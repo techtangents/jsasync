@@ -5,46 +5,34 @@ require("../../include/include.js");
  * In this instance, perhaps mock out setTimeout, or use Java threading from Rhino.
  */
 
-var testInvoke = function() {
+var testInvoke = withSpy_(function(spy) {
+    sz(3)(spy);
+    spy.verifyArgs([["3"]]);
+});
+
+var testCompose = withSpy_(function(spy) {
+    plus1[">>>"](sz)(3)(spy);
+    spy.verifyArgs([["4"]]);
+});
+
+var testMapOut = forEachWithSpy_(["mapOut", ">>^"], function(fnName, spy) {
+    plus1[fnName](function(a) { return a + 2; })(1)(spy);
+    spy.verifyArgs([[4]]);
+});
+
+var testMapIn = forEachWithSpy_(["mapIn", "<<^"], function(fnName, spy) {
+    plus1[fnName](function(a) { return Number(a); })("1")(spy);
+    spy.verifyArgs([[2]]);
+});
+
+var testConstant = permute2_(testValues, function(c, ignored) {
     withSpy(function(spy) {
-        sz(3)(spy);
-        spy.verifyArgs([["3"]]);
+        Async.constant(c)(ignored)(spy);
+        spy.verifyArgs([[c]]);
     });
-};
+});
 
-var testCompose = function() {
-    withSpy(function(spy) {
-        plus1[">>>"](sz)(3)(spy);
-        spy.verifyArgs([["4"]]);
-    });
-};
-
-var testMapOut = function() {
-    forEachWithSpy(["mapOut", ">>^"], function(fnName, spy) {
-        plus1[fnName](function(a) { return a + 2; })(1)(spy);
-        spy.verifyArgs([[4]]);
-    });
-};
-
-var testMapIn = function() {
-    forEachWithSpy(["mapIn", "<<^"], function(fnName, spy) {
-        plus1[fnName](function(a) { return Number(a); })("1")(spy);
-        spy.verifyArgs([[2]]);
-    });
-};
-
-var testConstant = function() {
-    permute2(testValues, function(c, ignored) {
-        withSpy(function(spy) {
-            Async.constant(c)(ignored)(spy);
-            spy.verifyArgs([[c]]);
-        });
-    });
-};
-
-var testAmap = function() {
-    forEach2WithSpy(testFunctions, testArrays, function(f, array, spy) {
-        Async.sync(f).amap(array)(spy);
-        spy.verifyArgs([[array.map(f)]]);
-    });
-};
+var testAmap = forEach2WithSpy_(testFunctions, testArrays, function(f, array, spy) {
+    Async.sync(f).amap(array)(spy);
+    spy.verifyArgs([[array.map(f)]]);
+});

@@ -33,11 +33,3 @@ var testFunctions = [
     function(x) { return [x]; },
     function(x) { return {a: x, b: [x]}; }
 ];
-
-var permute2 = function(input, f) {
-    input.forEach(function(a) {
-        input.forEach(function(b) {
-            f(a, b);
-        });
-    });
-};
