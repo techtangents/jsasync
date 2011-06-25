@@ -23,12 +23,19 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f */
     var bsync = function(f) {
 
+        // A Bsync is implemented in terms of an Async (Either p f)
+        var asy = Async.async(function(a, callback) {
+            var doCb = curry1(compose, callback);
+            f(a, doCb(Either.good), doCb(Either.bad));
+        });
+
         var me = function(a) {
             return Bfuture.bfuture(function(passCallback, failCallback) {
-                f(a, passCallback, failCallback);
+                asy(a)(function(either) {
+                    either.fold(passCallback, failCallback);
+                });
             });
         };
-
         return me;
     };
 

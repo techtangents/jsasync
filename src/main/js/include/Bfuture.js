@@ -14,8 +14,22 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
     /** bfuture :: ((p -> (), f -> ()) -> ()) -> Bfuture p f */
     var bfuture = function(f) {
 
-        // TODO: validate?
-        var me = wrap(f);
+        // TODO: validate input?
+
+        // A Bfuture p f is implemented in terms of a Future (Either p f)
+        var fut = Future.future(function(callback) {
+            f(function(p) {
+                callback(Either.good(p));
+            }, function(f) {
+                callback(Either.bad(f));
+            });
+        });
+
+        var me = function(passCallback, failCallback) {
+            fut(function(either) {
+                either.fold(passCallback, failCallback)
+            });
+        };
 
         /** this Bfuture a f -> a -> Bfuture b f
          *  Note: a Bsync a f is an (a -> Bfuture b f)
@@ -24,7 +38,7 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
             return bfuture(function(passCb, failCb) {
                 me(function(p) {
                     binder(p)(passCb, failCb);
-                }, failCb);
+                }, fa   ilCb);
             });
         };
 
