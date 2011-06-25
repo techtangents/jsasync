@@ -23,33 +23,32 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f */
     var bsync = function(f) {
 
-        // A Bsync is implemented in terms of an Async (Either p f)
-        var asy = Async.async(function(a, callback) {
-            var doCb = curry1(compose, callback);
-            f(a, doCb(Either.good), doCb(Either.bad));
-        });
-
         var me = function(a) {
             return Bfuture.bfuture(function(passCallback, failCallback) {
-                asy(a)(function(either) {
-                    either.fold(passCallback, failCallback);
-                });
+                f(a, passCallback, failCallback);
             });
         };
 
         return me;
     };
 
-    var identity = bsync(function(a, ifPass, ifFail) {
+    var identity = bsync(function(a, ifPass, _) {
         ifPass(a);
     });
 
-    var faildentity = bsync(function(a, ifPass, ifFail) {
+    // FIX this seems weird... is it correct? useful?
+    var faildentity = bsync(function(a, _, ifFail) {
         ifFail(a);
     });
 
+    var constantFail = function(v) {
+        return bsync(function(_, __, ifFail) {
+            ifFail(v);
+        });
+    };
+
     var sync = function(f) {
-        return bsync(function(a, ifPass, ifFail) {
+        return bsync(function(a, ifPass, _) {
             ifPass(f(a));
         });
     };
@@ -58,5 +57,6 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     api.sync = sync;
     api.identity = identity;
     api.faildentity = faildentity;
+    api.constantFail = constantFail;
 });
 

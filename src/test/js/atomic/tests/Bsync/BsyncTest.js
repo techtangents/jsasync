@@ -43,3 +43,11 @@ function testFail() {
         });
    });
 }
+
+function testBsyncConstantFail() {
+    testInts.forEach(function(input) {
+        var spy = jssert.spy();
+        Bsync.constantFail("no dice")("ignored")(explode, spy);
+        spy.verifyArgs([["no dice"]]);
+    });
+}

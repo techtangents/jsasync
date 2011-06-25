@@ -5,13 +5,17 @@ require("../../include/include.js");
  * In this instance, perhaps mock out setTimeout, or use Java threading from Rhino.
  */
 
-var testInvoke = testWithSpy(function() {
-    return sz(3);
-}, [["3"]]);
+var testInvoke = function() {
+    withSpy(function() {
+        return sz(3);
+    }, [["3"]]);
+};
 
-var testCompose = testWithSpy(function() {
-    return plus1[">>>"](sz)(3);
-}, [["4"]]);
+var testCompose = function() {
+    withSpy(function() {
+        return plus1[">>>"](sz)(3);
+    }, [["4"]]);
+};
 
 var testMapOut = function() {
     var check = function(fnName) {
@@ -49,11 +53,8 @@ var testAmap = function() {
         function(x) { return {a: x, b: [x]}; }
     ];
 
-    fns.forEach(function(f) {
-        testArrays.forEach(function(array) {
-            withSpy(function() {
-                return Async.sync(f).amap(array);
-            }, [[array.map(f)]]);
-        });
+    forEach2WithSpy(fns, testArrays, function(f, array, spy) {
+        Async.sync(f).amap(array)(spy);
+        spy.verifyArgs([[array.map(f)]]);
     });
 };

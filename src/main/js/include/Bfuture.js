@@ -6,6 +6,7 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
     */
 
     var Either = techtangents.jsasync.Either;
+    var wrap = techtangents.jsasync.Util.wrap;
 
     // FIX: test!
     // FIX: Figure out what type classes this should implement
@@ -13,29 +14,17 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
     /** bfuture :: ((p -> (), f -> ()) -> ()) -> Bfuture p f */
     var bfuture = function(f) {
 
-        // A Bfuture p f is implemented in terms of a Future (Either p f)
-        var fut = Future.future(function(callback) {
-            f(function(p) {
-                callback(Either.good(p));
-            }, function(f) {
-                callback(Either.bad(f));
-            });
-        });
+        // TODO: validate?
+        var me = wrap(f);
 
-        var me = function(passCallback, failCallback) {
-            fut(function(either) {
-                either.fold(passCallback, failCallback);
-            });
-        };
-
-        /** this Bfuture p f -> p -> Bfuture p' f */
+        /** this Bfuture a f -> a -> Bfuture b f
+         *  Note: a Bsync a f is an (a -> Bfuture b f)
+         */
         me.bind = function(binder) {
             return bfuture(function(passCb, failCb) {
                 me(function(p) {
                     binder(p)(passCb, failCb);
-                }, function(f) {
-                    failCb(f);
-                });
+                }, failCb);
             });
         };
 
@@ -43,13 +32,13 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
     };
 
     var constant = function(a) {
-        return bfuture(function(passCb, failCb) {
+        return bfuture(function(passCb, _) {
             passCb(a);
         });
     };
 
     var constantFail = function(a) {
-        return bfuture(function(passCb, failCb) {
+        return bfuture(function(_, failCb) {
             failCb(a);
         });
     }
