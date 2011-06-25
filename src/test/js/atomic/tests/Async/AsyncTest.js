@@ -20,25 +20,17 @@ var testCompose = function() {
 };
 
 var testMapOut = function() {
-    var check = function(fnName) {
-        withSpy(function(spy) {
-            plus1[fnName](function(a) { return a + 2; })(1)(spy);
-            spy.verifyArgs([[4]]);
-        });
-    };
-    check("mapOut");
-    check(">>^");
+    forEachWithSpy(["mapOut", ">>^"], function(fnName, spy) {
+        plus1[fnName](function(a) { return a + 2; })(1)(spy);
+        spy.verifyArgs([[4]]);
+    });
 };
 
 var testMapIn = function() {
-    var check = function(fnName) {
-        withSpy(function(spy) {
-            plus1[fnName](function(a) { return Number(a); })("1")(spy);
-            spy.verifyArgs([[2]]);
-        });
-    };
-    check("mapIn");
-    check("<<^");
+    forEachWithSpy(["mapIn", "<<^"], function(fnName, spy) {
+        plus1[fnName](function(a) { return Number(a); })("1")(spy);
+        spy.verifyArgs([[2]]);
+    });
 };
 
 var testConstant = function() {
