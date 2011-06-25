@@ -2,9 +2,10 @@ require("../../include/include.js");
 
 var testParOverConstant = function() {
     testArrays.forEach(function(array) {
-        withSpy(function() {
+        withSpy(function(spy) {
             var futures = array.map(Future.constant);
-            return Future.par(futures);
-        }, [[array]]);
+            Future.par(futures)(spy);
+            spy.verifyArgs([[array]]);
+        });
     });
 };

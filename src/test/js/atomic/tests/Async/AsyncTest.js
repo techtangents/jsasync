@@ -6,22 +6,25 @@ require("../../include/include.js");
  */
 
 var testInvoke = function() {
-    withSpy(function() {
-        return sz(3);
-    }, [["3"]]);
+    withSpy(function(spy) {
+        sz(3)(spy);
+        spy.verifyArgs([["3"]]);
+    });
 };
 
 var testCompose = function() {
-    withSpy(function() {
-        return plus1[">>>"](sz)(3);
-    }, [["4"]]);
+    withSpy(function(spy) {
+        plus1[">>>"](sz)(3)(spy);
+        spy.verifyArgs([["4"]]);
+    });
 };
 
 var testMapOut = function() {
     var check = function(fnName) {
-        withSpy(function() {
-            return plus1[fnName](function(a) { return a + 2; })(1);
-        }, [[4]]);
+        withSpy(function(spy) {
+            plus1[fnName](function(a) { return a + 2; })(1)(spy);
+            spy.verifyArgs([[4]]);
+        });
     };
     check("mapOut");
     check(">>^");
@@ -29,9 +32,10 @@ var testMapOut = function() {
 
 var testMapIn = function() {
     var check = function(fnName) {
-        withSpy(function() {
-            return plus1[fnName](function(a) { return Number(a); })("1");
-        }, [[2]]);
+        withSpy(function(spy) {
+            plus1[fnName](function(a) { return Number(a); })("1")(spy);
+            spy.verifyArgs([[2]]);
+        });
     };
     check("mapIn");
     check("<<^");
@@ -39,9 +43,10 @@ var testMapIn = function() {
 
 var testConstant = function() {
     permute2(testValues, function(c, ignored) {
-        withSpy(function() {
-            return Async.constant(c)(ignored);
-        }, [[c]]);
+        withSpy(function(spy) {
+            Async.constant(c)(ignored)(spy);
+            spy.verifyArgs([[c]]);
+        });
     });
 };
 

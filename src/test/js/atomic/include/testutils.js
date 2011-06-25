@@ -1,7 +1,6 @@
-var withSpy = function(fn, expectedArgs) {
+var withSpy = function(fn) {
     var spy = jssert.spy();
-    fn()(spy);
-    spy.verifyArgs(expectedArgs);
+    fn(spy);
 };
 
 var explode = function() { throw "kaboom!"; };

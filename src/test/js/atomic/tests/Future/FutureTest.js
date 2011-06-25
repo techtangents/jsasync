@@ -2,9 +2,10 @@ require("../../include/include.js");
 
 var testBind = function() {
     testInts.forEach(function(x) {
-        withSpy(function() {
-            return plus1(x) [">>="] (sz) [">>="] (suffixQ);
-        }, [[String(x + 1) + "q"]]);
+        withSpy(function(spy) {
+            plus1(x) [">>="] (sz) [">>="] (suffixQ)(spy);
+            spy.verifyArgs([[String(x + 1) + "q"]]);
+        });
     });
 };
 
@@ -28,17 +29,19 @@ var testAnonBind = function() {
 
 var testMap = function() {
     testInts.forEach(function(v) {
-        withSpy(function() {
-            return Future.constant(v) ["<$>"] (function(x) { return x + 2; })
-        }, [[v + 2]]);
+        withSpy(function(spy) {
+            Future.constant(v) ["<$>"] (function(x) { return x + 2; })(spy);
+            spy.verifyArgs([[v + 2]]);
+        });
     });
 };
 
 var testConstant = function() {
     testValues.forEach(function(x) {
-        withSpy(function() {
-            return Future.constant(x);
-        }, [[x]])
+        withSpy(function(spy) {
+            Future.constant(x)(spy);
+            spy.verifyArgs([[x]]);
+        });
     });
 };
 
