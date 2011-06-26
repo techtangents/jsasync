@@ -64,7 +64,7 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
         return bfuture(function(_, failCb) {
             failCb(a);
         });
-    }
+    };
 
     api.constant = constant;
     api.constantFail = constantFail;
