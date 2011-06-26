@@ -29,18 +29,6 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
             fut(Either.foldOn(passCb, failCb));
         };
 
-        /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
-         *  Note: a Bsync a f is an (a -> Bfuture b f)
-         */
-        me.bind = function(binder) {
-            // FIX should this be rewritten in terms of Async.bind and Either.bind?
-            return bfuture(function(passCb, failCb) {
-                me(function(p) {
-                    binder(p)(passCb, failCb);
-                }, failCb);
-            });
-        };
-
         /** this Bfuture a f -> (a -> b) -> Bfuture b f */
         me.map = function(mapper) {
             return bfuture(function(passCb, failCb) {
@@ -50,6 +38,31 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
                 fut.map(eiMap)(Either.foldOn(passCb, failCb));
             });
         };
+        me["<$>"] = me.map;
+
+        /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
+         *  Note: a Bsync a f is an (a -> Bfuture b f)
+         */
+        me.bind = function(binder) {
+            return bfuture(function(passCb, failCb) {
+                me(function(p) {
+                    binder(p)(passCb, failCb);
+                }, failCb);
+            });
+        };
+        me[">>="] = me.bind;
+
+        /** bindAnon :: this Bfuture a f -> Bfuture b f -> Bfuture b f
+         *  Note: (this Bfuture a) is strict - it is evaluated and the result discarded.
+         *  This allows side effects to be chained.
+         */
+        // TODO test
+        me.bindAnon = function(futureB) {
+            return me.bind(function(_) {
+                return futureB;
+            });
+        };
+        me[">>"] = me.bindAnon;
 
         return me;
     };
