@@ -31,7 +31,7 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
             });
         };
 
-        /** this Bfuture a f -> a -> Bfuture b f
+        /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
          *  Note: a Bsync a f is an (a -> Bfuture b f)
          */
         me.bind = function(binder) {
@@ -40,6 +40,18 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
                 me(function(p) {
                     binder(p)(passCb, failCb);
                 }, failCb);
+            });
+        };
+
+        /** this Bfuture a f -> (a -> b) -> Bfuture b f */
+        me.map = function(mapper) {
+            return bfuture(function(passCb, failCb) {
+                var eiMap = function(either) {
+                    return either.map(mapper);
+                };
+                fut.map(eiMap)(function(either){
+                    either.fold(passCb, failCb)
+                });
             });
         };
 

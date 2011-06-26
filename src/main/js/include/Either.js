@@ -5,18 +5,24 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
      *  Very lightweight - only fold is implemented
      */
 
-    var good = function(g) {
+    var good = function good(g) {
         return {
-            fold: function(goodFn, badFn) {
+            fold: function(goodFn, _) {
                 return goodFn(g);
+            },
+            map: function(mapper) {
+                return good(mapper(g));
             }
         };
     };
 
-    var bad = function(b) {
+    var bad = function bad(b) {
         return {
-            fold: function(goodFn, badFn) {
+            fold: function(_, badFn) {
                 return badFn(b);
+            },
+            map: function(_) {
+                return bad(b);
             }
         };
     };
