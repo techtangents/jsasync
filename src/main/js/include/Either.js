@@ -27,6 +27,13 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
         };
     };
 
+    var foldOn = function(passFn, failFn) {
+        return function(either) {
+            return either.fold(passFn, failFn);
+        };
+    };
+
     api.good = good;
     api.bad = bad;
+    api.foldOn = foldOn;
 });

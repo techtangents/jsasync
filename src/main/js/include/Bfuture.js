@@ -25,10 +25,8 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
             });
         });
 
-        var me = function(passCallback, failCallback) {
-            fut(function(either) {
-                either.fold(passCallback, failCallback)
-            });
+        var me = function(passCb, failCb) {
+            fut(Either.foldOn(passCb, failCb));
         };
 
         /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
@@ -49,9 +47,7 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
                 var eiMap = function(either) {
                     return either.map(mapper);
                 };
-                fut.map(eiMap)(function(either){
-                    either.fold(passCb, failCb)
-                });
+                fut.map(eiMap)(Either.foldOn(passCb, failCb));
             });
         };
 
