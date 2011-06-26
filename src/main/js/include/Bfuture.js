@@ -35,10 +35,11 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
          *  Note: a Bsync a f is an (a -> Bfuture b f)
          */
         me.bind = function(binder) {
+            // FIX should this be rewritten in terms of Async.bind and Either.bind?
             return bfuture(function(passCb, failCb) {
                 me(function(p) {
                     binder(p)(passCb, failCb);
-                }, fa   ilCb);
+                }, failCb);
             });
         };
 
