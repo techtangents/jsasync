@@ -47,6 +47,12 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
         ifFail(a);
     });
 
+    var constant = function(v) {
+        return bsync(function(_, ifPass, __) {
+            ifPass(v);
+        });
+    };
+
     var constantFail = function(v) {
         return bsync(function(_, __, ifFail) {
             ifFail(v);
