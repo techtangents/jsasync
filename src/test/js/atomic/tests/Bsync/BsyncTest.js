@@ -27,8 +27,3 @@ var testFail = forEach2WithSpy_(testFunctionsFromInt, testInts, function(f, inpu
     var expected = f(input);
     spy.verifyArgs([[expected]]);
 });
-
-var testBsyncConstantFail = forEachWithSpy_(testInts, function(input, spy) {
-    Bsync.constantFail("no dice")("ignored")(explode, spy);
-    spy.verifyArgs([["no dice"]]);
-});
