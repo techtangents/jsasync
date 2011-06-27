@@ -58,7 +58,7 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
          *  also chain(f, g) = g(f(x))
          *  composeRight :: this Async b c -> Async a b -> Async a c
          */
-        var composeL = Util.flip(composeR);
+        var composeL = Util.flipUncurried(composeR);
 
         /** composeR :: this Async a b -> Async b c -> Async a c */
         me.composeR = function(other) {

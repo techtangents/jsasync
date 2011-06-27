@@ -1,5 +1,5 @@
 Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
-    function flip(f) {
+    function flipUncurried(f) {
         return function(a, b) {
             return f(b, a);
         };
@@ -31,13 +31,13 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
         }
     }
 
-    function compose(f, g) {
+    function composeUncurried(f, g) {
         return function(x) {
             return f(g(x));
         };
     }
 
-    var chain = flip(compose);
+    var chainUncurried = flipUncurried(composeUncurried);
 
     var curry1 = function(f, a) {
         return function(b) {
@@ -49,13 +49,14 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
         return x;
     }
 
-    api.flip = flip;
+    api.flipUncurried = flipUncurried;
+    api.composeUncurried = composeUncurried;
+    api.chainUncurried = chainUncurried;
+
     api.wrap = wrap;
     api.konst = konst;
     api.arrayMap = arrayMap;
     api.arrayEach = arrayEach;
-    api.compose = compose;
-    api.chain = chain;
     api.curry1 = curry1;
     api.identity = identity;
 });

@@ -6,7 +6,6 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
     */
 
     var Either = techtangents.jsasync.Either;
-    var wrap = techtangents.jsasync.Util.wrap;
 
     // FIX: test!
     // FIX: Figure out what type classes this should implement
