@@ -1,10 +1,4 @@
 Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
-    /** flipUncurried :: ((a, b) -> c) -> ((b, a) -> c) */
-    var flipUncurried = function(f) {
-        return function(a, b) {
-            return f(b, a);
-        };
-    };
 
     /** flip :: (a -> b -> c) -> b -> a -> c */
     var flip = function(f) {
@@ -12,6 +6,13 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
             return function(b) {
                 return f(b)(a);
             };
+        };
+    };
+
+    /** flipUncurried :: ((a, b) -> c) -> ((b, a) -> c) */
+    var flipUncurried = function(f) {
+        return function(a, b) {
+            return f(b, a);
         };
     };
 
