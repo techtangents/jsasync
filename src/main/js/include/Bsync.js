@@ -55,15 +55,11 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     /** faildentity :: Bsync f p f */
     var faildentity = syncFail(Util.identity);
 
-    var knst = function(f) {
-        return Util.chainUncurried(Util.konst, f);
-    };
-
     /** constant :: p -> Bsync a p f */
-    var constant = knst(sync);
+    var constant = Util.chainConst(sync);
 
     /** constantFail :: f -> Bsync a p f */
-    var constantFail = knst(syncFail);
+    var constantFail = Util.chainConst(syncFail);
 
     api.bsync = bsync;
     api.sync = sync;
