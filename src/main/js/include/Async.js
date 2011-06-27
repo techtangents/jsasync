@@ -33,48 +33,27 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
         };
         me[">>^"] = me.mapOut;
 
-        /** "Normal" Right-to-Left composition:  f . g == \x -> f(g(x))
-         *  In a standard function, this would be: compose(f, g)(x) == f(g(x));
-         *  In an async function, it is:
-         *   compose(f, g) = function(x, callback) {
-         *     return f(a, function(b) {
-         *          g(b, callback);
-         *     }
-         *   }
-         */
-        var composeR = function(bc, ab) {
-            return Async.async(function(a, callback) {
-                ab(a)(function(b) {
-                    bc(b)(callback);
+        // TODO compose and chain could do with a few more tests
+
+        /** compose :: Async b c -> Async a b -> Async a c */
+        var compose = function(bc) {
+            return function(ab) {
+                return Async.async(function(a, callback) {
+                    ab(a)(Util.flip(bc)(callback));
                 });
-            });
+            };
         };
 
-        /** Left-to-Right composition.
-         *  let a ===> f mean "pass a to f" i.e. f(a)
-         *  then chain(f, g) = \x -> x ===> f ===> g
-         *  also chain(f, g) = g(f(x))
-         *  composeRight :: this Async b c -> Async a b -> Async a c
-         */
-        var composeL = Util.flipUncurried(composeR);
+        /** chain :: Async a b -> Async b c -> Async a c */
+        var chain = Util.flip(compose);
 
-        /** composeR :: this Async a b -> Async b c -> Async a c */
-        me.composeR = function(other) {
-            return chain(me, other);
-        };
-        me.compose = me.composeR;
-        me["<<<"] = me.composeR;
+        /** compose :: this Async b c -> Async a b -> Async a c */
+        me.compose = compose(me);
+        me["<<<"] = me.compose;
 
-        /** composeL :: this Async b c -> Async a b -> Async a c
-         *  TIP! To "chain" Asyncs together, use this syntax:
-         *  var asyncAD = (ab) [">>>"] (bc) [">>>"] (cd);
-         *  var asyncAd = ab.compose(bc).compose(cd);
-         */
-        me.composeL = function(other) {
-            return composeL(me, other);
-        };
-        me.chain = me.composeL;
-        me[">>>"] = me.composeL;
+        /** chain :: this Async a b -> Async b c -> Async a c */
+        me.chain = chain(me);
+        me[">>>"] = me.chain;
 
         /** Returns a Future that performs this Async over each element of the input array.
          *  amap :: this Async a b -> [a] -> Future [b]
@@ -95,9 +74,7 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
     };
 
     /** constant :: b -> Async a b */
-    var constant = function(x) {
-        return sync(Util.konst(x));
-    };
+    var constant = Util.compose(sync)(Util.konst);
 
     api.async = async;
     api.sync = sync;

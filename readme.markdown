@@ -40,6 +40,12 @@ b) convert the arguments to an object
    - e.g. function(a, b, callback) -> function(args, callback)
      where args is an object of {a: ..., b: ...}
 
+Composing Asyncs
+----------------
+
+var asyncAd = (ab) [">>>"] (bc) [">>>"] (cd);
+var asyncAd = ab.compose(bc).compose(cd);
+
 
 Future
 ------
