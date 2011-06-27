@@ -27,27 +27,33 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
 
         var me = function(a) {
             return Bfuture.bfuture(function(passCallback, failCallback) {
-                asy(a)(function(either) {
-                    either.fold(passCallback, failCallback);
-                });
+                asy(a)(Either.foldOn(passCallback, failCallback));
             });
         };
         return me;
     };
 
-    /** sync :: (a -> p) -> Bsync a p f */
-    var sync = function(f) {
-        return bsync(function(a, ifPass, _) {
-            ifPass(f(a));
+    var pickPass = function(ifPass, ifFail) {
+        return ifPass;
+    };
+
+    var pickFail = function(ifPass, ifFail) {
+        return ifFail;
+    };
+
+    var syncer = function(pickCb) {
+        return Util.compose(bsync)(function(f) {
+            return function(a, ifPass, ifFail) {
+                pickCb(ifPass, ifFail)(f(a));
+            };
         });
     };
 
+    /** sync :: (a -> p) -> Bsync a p f */
+    var sync = syncer(pickPass);
+
     /** syncFail :: (a -> f) -> Bsync a p f */
-    var syncFail = function(f) {
-        return bsync(function(a, _, ifFail) {
-            ifFail(f(a));
-        });
-    };
+    var syncFail = syncer(pickFail);
 
     /** identity :: Bsync a a f */
     var identity = sync(Util.identity);
@@ -69,4 +75,3 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     api.constant = constant;
     api.constantFail = constantFail;
 });
-
