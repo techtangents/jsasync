@@ -35,20 +35,6 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
         return me;
     };
 
-    /** constant :: p -> Bsync a p f */
-    var constant = function(v) {
-        return bsync(function(_, ifPass, __) {
-            ifPass(v);
-        });
-    };
-
-    /** constantFail :: f -> Bsync a p f */
-    var constantFail = function(v) {
-        return bsync(function(_, __, ifFail) {
-            ifFail(v);
-        });
-    };
-
     /** sync :: (a -> p) -> Bsync a p f */
     var sync = function(f) {
         return bsync(function(a, ifPass, _) {
@@ -68,6 +54,16 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
 
     /** faildentity :: Bsync f p f */
     var faildentity = syncFail(Util.identity);
+
+    /** constant :: p -> Bsync a p f */
+    var constant = function(v) {
+        return sync(Util.konst(v));
+    };
+
+    /** constantFail :: f -> Bsync a p f */
+    var constantFail = function(v) {
+        return syncFail(Util.konst(v));
+    }; 
 
     api.bsync = bsync;
     api.sync = sync;
