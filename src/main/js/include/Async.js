@@ -28,9 +28,7 @@ Ephox.core.module.define("techtangents.jsasync.Async", [], function(api) {
         /** mapOut :: this Async a b -> (b -> c) -> Async a c */
         me.mapOut = function(mapper) {
             return Async.async(function(a, callback) {
-                me(a)(function(b) {
-                    callback(mapper(b));
-                });
+                me(a)(Util.compose(callback)(mapper));
             });
         };
         me[">>^"] = me.mapOut;
