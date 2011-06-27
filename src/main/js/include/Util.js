@@ -1,10 +1,12 @@
 Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
-    function flipUncurried(f) {
+    /** flipUncurried :: ((a, b) -> c) -> ((b, a) -> c) */
+    var flipUncurried = function(f) {
         return function(a, b) {
             return f(b, a);
         };
-    }
+    };
 
+    /** flip :: (a -> b -> c) -> b -> a -> c */
     var flip = function(f) {
         return function(a) {
             return function(b) {
@@ -13,6 +15,7 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
         };
     };
 
+    /** wrap :: function -> function */
     function wrap(f) {
         return function() {
             f.apply(this, arguments);
@@ -20,31 +23,27 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
     }
 
     /** konst :: a -> b -> a */
-    function konst(x) {
+    var konst = function(x) {
         return function(_) {
             return x;
         };
-    }
+    };
 
-    function arrayMap(a, f) {
+    /** arrayMap :: ([a], a -> b) -> [b] */
+    var arrayMap = function(a, f) {
         var r = [];
         for (var i = 0; i < a.length; i++) {
             r.push(f(a[i], i, a));
         }
         return r;
-    }
+    };
 
-    function arrayEach(a, f) {
+    /** arrayEach :: ([a], a -> ()) -> () */
+    var arrayEach = function(a, f) {
         for (var i = 0; i < a.length; i++) {
             f(a[i], i, a);
         }
-    }
-
-    function composeUncurried(f, g) {
-        return function(x) {
-            return f(g(x));
-        };
-    }
+    };
 
     /** compose :: (b -> c) -> (a -> b) -> a -> c */
     var compose = function(f) {
@@ -58,14 +57,6 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
     /** chain :: (a -> b) -> (b -> c) -> a -> c */
     var chain = flip(compose);
 
-    var chainUncurried = flipUncurried(composeUncurried);
-
-    var curry1 = function(f, a) {
-        return function(b) {
-            return f(a, b);
-        };
-    };
-
     /** identity :: a -> a */
     var identity = function(x) {
         return x;
@@ -74,19 +65,14 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
     /** chainConst :: ((b -> a) -> c) -> a -> c */
     var chainConst = chain(konst);
 
-    api.flipUncurried = flipUncurried;
-    api.composeUncurried = composeUncurried;
-    api.chainUncurried = chainUncurried;
-
     api.flip = flip;
+    api.flipUncurried = flipUncurried;
     api.compose = compose;
     api.chain = chain;
-
     api.wrap = wrap;
     api.konst = konst;
     api.arrayMap = arrayMap;
     api.arrayEach = arrayEach;
-    api.curry1 = curry1;
     api.identity = identity;
     api.chainConst = chainConst;
 });

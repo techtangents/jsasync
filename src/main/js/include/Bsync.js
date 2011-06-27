@@ -21,7 +21,7 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
 
         // A Bsync is implemented in terms of an Async (Either p f)
         var asy = Async.async(function(a, callback) {
-            var doCb = Util.curry1(Util.composeUncurried, callback);
+            var doCb = Util.compose(callback);
             f(a, doCb(Either.good), doCb(Either.bad));
         });
 
