@@ -39,34 +39,47 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
         return me;
     };
 
-    var identity = bsync(function(a, ifPass, _) {
-        ifPass(a);
-    });
-
-    var faildentity = bsync(function(a, _, ifFail) {
-        ifFail(a);
-    });
-
+    /** constant :: p -> Bsync a p f */
     var constant = function(v) {
         return bsync(function(_, ifPass, __) {
             ifPass(v);
         });
     };
 
+    /** constantFail :: f -> Bsync a p f */
     var constantFail = function(v) {
         return bsync(function(_, __, ifFail) {
             ifFail(v);
         });
     };
 
+    /** sync :: (a -> p) -> Bsync a p f */
     var sync = function(f) {
         return bsync(function(a, ifPass, _) {
             ifPass(f(a));
         });
     };
 
+    /** syncFail :: (a -> f) -> Bsync a p f */
+    var syncFail = function(f) {
+        return bsync(function(a, _, ifFail) {
+            ifFail(f(a));
+        });
+    };
+
+    /** identity :: Bsync a a f */
+    var identity = bsync(function(a, ifPass, _) {
+        ifPass(a);
+    });
+
+    /** faildentity :: Bsync f p f */
+    var faildentity = bsync(function(a, _, ifFail) {
+        ifFail(a);
+    });
+
     api.bsync = bsync;
     api.sync = sync;
+    api.syncFail = syncFail;
     api.identity = identity;
     api.faildentity = faildentity;
     api.constant = constant;

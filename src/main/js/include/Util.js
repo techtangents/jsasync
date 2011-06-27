@@ -45,6 +45,10 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
         };
     };
 
+    function identity(x) {
+        return x;
+    }
+
     api.flip = flip;
     api.wrap = wrap;
     api.konst = konst;
@@ -53,4 +57,5 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
     api.compose = compose;
     api.chain = chain;
     api.curry1 = curry1;
+    api.identity = identity;
 });
