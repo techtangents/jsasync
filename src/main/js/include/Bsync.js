@@ -13,6 +13,7 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     var Async = techtangents.jsasync.Async;
     var Either = techtangents.jsasync.Either;
     var Bfuture = techtangents.jsasync.Bfuture;
+    var Bpicker = techtangents.jsasync.Bpicker;
 
     // FIX: Figure out what type classes this should implement
 
@@ -33,14 +34,6 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
         return me;
     };
 
-    var pickPass = function(ifPass, ifFail) {
-        return ifPass;
-    };
-
-    var pickFail = function(ifPass, ifFail) {
-        return ifFail;
-    };
-
     var syncer = function(pickCb) {
         return Util.compose(bsync)(function(f) {
             return function(a, ifPass, ifFail) {
@@ -50,10 +43,10 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     };
 
     /** sync :: (a -> p) -> Bsync a p f */
-    var sync = syncer(pickPass);
+    var sync = syncer(Bpicker.pass);
 
     /** syncFail :: (a -> f) -> Bsync a p f */
-    var syncFail = syncer(pickFail);
+    var syncFail = syncer(Bpicker.fail);
 
     /** identity :: Bsync a a f */
     var identity = sync(Util.identity);
