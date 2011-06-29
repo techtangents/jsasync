@@ -7,6 +7,7 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
 
     var Either = techtangents.jsasync.Either;
     var Bpicker = techtangents.jsasync.Bpicker;
+    var Util = techtangents.jsasync.Util;
 
     // FIX: test!
     // FIX: Figure out what type classes this should implement
@@ -64,7 +65,30 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
         };
         me[">>"] = me.bindAnon;
 
+        me.toFutureEither = Util.konst(fut);
+
         return me;
+    };
+
+    /** Compose an array of futures.
+     *  par :: [Bfuture p f] -> Bfuture [a] [Either p f]
+     */
+    // TODO: test like there's no tomorrow!
+    var par = function(futures) {
+        return bfuture(function(passCb, failCb) {
+            var feithers = Util.arrayMap(futures, function(fut) {
+                return fut.toFutureEither();
+            });
+            Future.par(feithers)(function(results) {
+                var goods = Either.goods(results);
+                var weWin = results.length === goods.length;
+                if (weWin) {
+                    passCb(goods);
+                } else {
+                    failCb(results);
+                }
+            });
+        });
     };
 
     var knst = function(picker) {
@@ -81,4 +105,5 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
     api.constant = constant;
     api.constantFail = constantFail;
     api.bfuture = bfuture;
+    api.par = par;
 });

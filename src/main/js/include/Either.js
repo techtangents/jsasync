@@ -2,8 +2,9 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
 
     /** data Either g b = Good g | Bad b
      *  A simple sum type of a good/bad value.
-     *  Very lightweight - only fold is implemented
      */
+
+    var Util = techtangents.jsasync.Util;
 
     var good = function good(g) {
         return {
@@ -12,7 +13,8 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
             },
             map: function(mapper) {
                 return good(mapper(g));
-            }
+            },
+            isGood : Util.konst(true)
         };
     };
 
@@ -23,7 +25,8 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
             },
             map: function(_) {
                 return bad(b);
-            }
+            },
+            isGood : Util.konst(false)
         };
     };
 
@@ -33,7 +36,15 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
         };
     };
 
+    /** goods :: [Either good bad] -> [good] */
+    var goods = function(es) {
+        return Util.arrayFilter(es, function(e) {
+            return e.isGood();
+        });
+    };
+
     api.good = good;
     api.bad = bad;
     api.foldOn = foldOn;
+    api.goods = goods;
 });

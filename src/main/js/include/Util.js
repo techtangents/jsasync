@@ -1,5 +1,7 @@
 Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
 
+    // TODO: should we be using TheDLibrary here?
+
     /** flip :: (a -> b -> c) -> b -> a -> c */
     var flip = function(f) {
         return function(a) {
@@ -46,6 +48,17 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
         }
     };
 
+    /** arrayFilter :: ([a], (a -> Boolean)) -> [a] */
+    var arrayFilter = function(as, p) {
+        var r = [];
+        arrayEach(as, function(a) {
+            if (p(a)) {
+                r.push(a);
+            }
+        });
+        return r;
+    };
+
     /** compose :: (b -> c) -> (a -> b) -> a -> c */
     var compose = function(f) {
         return function(g) {
@@ -74,6 +87,7 @@ Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
     api.konst = konst;
     api.arrayMap = arrayMap;
     api.arrayEach = arrayEach;
+    api.arrayFilter = arrayFilter;
     api.identity = identity;
     api.chainConst = chainConst;
 });
