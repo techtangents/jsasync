@@ -6,6 +6,7 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
     */
 
     var Either = techtangents.jsasync.Either;
+    var Bpicker = techtangents.jsasync.Bpicker;
 
     // FIX: test!
     // FIX: Figure out what type classes this should implement
@@ -66,17 +67,16 @@ Ephox.core.module.define("techtangents.jsasync.Bfuture", [], function(api, _priv
         return me;
     };
 
-    var constant = function(a) {
-        return bfuture(function(passCb, _) {
-            passCb(a);
-        });
+    var knst = function(picker) {
+        return function(a) {
+            return bfuture(function(passCb, failCb) {
+                picker(passCb, failCb)(a);
+            });
+        };
     };
 
-    var constantFail = function(a) {
-        return bfuture(function(_, failCb) {
-            failCb(a);
-        });
-    };
+    var constant = knst(Bpicker.pass);
+    var constantFail = knst(Bpicker.fail);
 
     api.constant = constant;
     api.constantFail = constantFail;
