@@ -14,7 +14,8 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
             map: function(mapper) {
                 return good(mapper(g));
             },
-            isGood : Util.konst(true)
+            isGood : Util.konst(true),
+            goodOrDie: Util.konst(g)
         };
     };
 
@@ -26,7 +27,10 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
             map: function(_) {
                 return bad(b);
             },
-            isGood : Util.konst(false)
+            isGood : Util.konst(false),
+            goodOrDie : function() {
+                throw "goodOrDie called on Either.bad"
+            }
         };
     };
 
@@ -38,8 +42,11 @@ Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _priva
 
     /** goods :: [Either good bad] -> [good] */
     var goods = function(es) {
-        return Util.arrayFilter(es, function(e) {
+        var goodEithers = Util.arrayFilter(es, function(e) {
             return e.isGood();
+        });
+        return Util.arrayMap(goodEithers, function(e) {
+            return e.goodOrDie();
         });
     };
 

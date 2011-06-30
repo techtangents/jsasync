@@ -10,3 +10,5 @@ var Bsync = techtangents.jsasync.Bsync;
 jssert.assertEq(undefined, this.Bfuture);
 var Bfuture = techtangents.jsasync.Bfuture;
 
+jssert.assertEq(undefined, this.Either);
+var Either = techtangents.jsasync.Either;
