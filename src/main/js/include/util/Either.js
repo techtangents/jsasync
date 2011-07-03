@@ -1,10 +1,10 @@
-Ephox.core.module.define("techtangents.jsasync.Either", [], function(api, _private) {
+Ephox.core.module.define("techtangents.jsasync.util.Either", [], function(api, _private) {
 
     /** data Either g b = Good g | Bad b
      *  A simple sum type of a good/bad value.
      */
 
-    var Util = techtangents.jsasync.Util;
+    var Util = techtangents.jsasync.util.Util;
 
     var good = function good(g) {
         return {

@@ -1,4 +1,4 @@
-Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
+Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
     /** A Bsync represents an asynchronous computation which may "succeed" or "fail".
      *  Applying an argument to a Bsync generates a Bfuture.
@@ -9,11 +9,12 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
      *  Bsync a p f :: Bsync { apply :: (a, p -> (), f -> ()) -> () }
      */
 
-    var Util = techtangents.jsasync.Util;
-    var Async = techtangents.jsasync.Async;
-    var Either = techtangents.jsasync.Either;
-    var Bfuture = techtangents.jsasync.Bfuture;
-    var Bpicker = techtangents.jsasync.Bpicker;
+    var Util    = techtangents.jsasync.util.Util;
+    var Either  = techtangents.jsasync.util.Either;
+    var Bpicker = techtangents.jsasync.util.Bpicker;
+
+    var Async   = techtangents.jsasync.bits.Async;
+    var Bfuture = techtangents.jsasync.bits.Bfuture;
 
     // FIX: Figure out what type classes this should implement
 

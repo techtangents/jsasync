@@ -1,4 +1,4 @@
-Ephox.core.module.define("techtangents.jsasync.Util", [], function(api) {
+Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
 
     // TODO: should we be using TheDLibrary here?
 

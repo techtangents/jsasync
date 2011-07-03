@@ -1,4 +1,4 @@
-Ephox.core.module.define("techtangents.jsasync.Ticker", [], function(api) {
+Ephox.core.module.define("techtangents.jsasync.util.Ticker", [], function(api) {
     api.create = function(num, done) {
         var count = 0;
         function check() {
