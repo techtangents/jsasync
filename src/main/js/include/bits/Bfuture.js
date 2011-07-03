@@ -13,27 +13,12 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
     var bfuture = function(f) {
 
         // TODO: validate input?
-
-        // A Bfuture p f is implemented in terms of a Future (Either p f)
-        var fut = Future.future(function(callback) {
-            f(function(p) {
-                callback(Either.good(p));
-            }, function(f) {
-                callback(Either.bad(f));
-            });
-        });
-
-        var me = function(passCb, failCb) {
-            fut(Either.foldOn(passCb, failCb));
-        };
+        var me = Util.wrap(f);
 
         /** this Bfuture a f -> (a -> b) -> Bfuture b f */
         me.map = function(mapper) {
             return bfuture(function(passCb, failCb) {
-                var eiMap = function(either) {
-                    return either.map(mapper);
-                };
-                fut.map(eiMap)(Either.foldOn(passCb, failCb));
+                me(Util.compose(passCb)(mapper), failCb);
             });
         };
         me["<$>"] = me.map;
@@ -56,13 +41,20 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
          */
         // TODO test
         me.bindAnon = function(futureB) {
+            // TODO: I think this is: return me.bind(Util.konst(futureB));
             return me.bind(function(_) {
                 return futureB;
             });
         };
         me[">>"] = me.bindAnon;
 
-        me.toFutureEither = Util.konst(fut);
+        /** TODO type sig */
+        me.toFutureEither = function() {
+            return Future.future(function(callback) {
+                var cb = Util.compose(callback);
+                f(cb(Either.good), cb(Either.bad));
+            });
+        };
 
         return me;
     };
@@ -70,7 +62,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
     /** Compose an array of futures.
      *  par :: [Bfuture p f] -> Bfuture [a] [Either p f]
      */
-    // TODO: test like there's no tomorrow!
     var par = function(futures) {
         return bfuture(function(passCb, failCb) {
             var feithers = Util.arrayMap(futures, function(fut) {
@@ -96,7 +87,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         };
     };
 
+    /** TODO: type sig */
     var constant = knst(Bpicker.pass);
+
+    /** TODO: type sig */
     var constantFail = knst(Bpicker.fail);
 
     api.constant = constant;
