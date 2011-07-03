@@ -67,6 +67,13 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     /** constantFail :: f -> Bsync a p f */
     var constantFail = Util.chainConst(syncFail);
 
+    /** predicate :: (a -> Bool) -> Bsync a a a */
+    var predicate = function(pred) {
+        return Bsync.bsync(function(a, passCb, failCb) {
+            (pred(a) ? passCb : failCb)(a);
+        });
+    };
+
     api.bsync = bsync;
     api.sync = sync;
     api.syncFail = syncFail;
@@ -74,4 +81,5 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
     api.faildentity = faildentity;
     api.constant = constant;
     api.constantFail = constantFail;
+    api.predicate = predicate;
 });

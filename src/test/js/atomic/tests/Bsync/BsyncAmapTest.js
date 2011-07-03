@@ -16,10 +16,17 @@ var testFail = forEachWithSpy_(testInts, function(inputs_, spy) {
     var expected = inputs.map(function(a) {
         return (pred(a) ? Either.good : Either.bad)(a);
     });
-    var bs = Bsync.bsync(function(a, passCb, failCb) {
+
+    var check = function(bs) {
+        bs.amap(inputs)(explode, spy);
+        var actual = spy.getInvocationArgs()[0][0];
+        assertArrayOfEitherEquals(expected, actual);
+    };
+
+    check(Bsync.bsync(function(a, passCb, failCb) {
          pred(a) ? passCb(a) : failCb(a);
-    });
-    bs.amap(inputs)(explode, spy);
-    var actual = spy.getInvocationArgs()[0][0];
-    assertArrayOfEitherEquals(expected, actual);
+    }));
+
+    check(Bsync.predicate(pred));
+
 });
