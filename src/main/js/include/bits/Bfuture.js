@@ -83,10 +83,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         });
     };
 
-    /** TODO: type sig */
+    /** constant :: a -> Bfuture a f */
     var constant = knst(Bpicker.pass);
 
-    /** TODO: type sig */
+    /** constantFail :: f -> Bfuture a f */
     var constantFail = knst(Bpicker.fail);
 
     api.constant = constant;
