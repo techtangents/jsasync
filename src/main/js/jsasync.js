@@ -8,5 +8,8 @@ Ephox.core.include.require("jsasync", [
     "include/bits/Future.js",
     "include/bits/Async.js",
     "include/bits/Bfuture.js",
-    "include/bits/Bsync.js"
+    "include/bits/Bsync.js",
+
+    "include/glue/Library.js",
+    "include/Api.js"
 ]);

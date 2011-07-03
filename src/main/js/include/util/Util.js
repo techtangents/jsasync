@@ -59,6 +59,22 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         return r;
     };
 
+    var objectEach = function(o, f) {
+        for (var i in o) {
+            if (o.hasOwnProperty(i)) {
+                f(o[i], i, o);
+            }
+        }
+    };
+
+    var objectMap = function(o, f) {
+        var r = {};
+        objectEach(o, function(x, i) {
+            r[i] = f(x, i, o);
+        });
+        return r;
+    };
+
     /** compose :: (b -> c) -> (a -> b) -> a -> c */
     var compose = function(f) {
         return function(g) {
@@ -88,6 +104,8 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.arrayMap = arrayMap;
     api.arrayEach = arrayEach;
     api.arrayFilter = arrayFilter;
+    api.objectEach = objectEach;
+    api.objectMap = objectMap;
     api.identity = identity;
     api.chainConst = chainConst;
 });
