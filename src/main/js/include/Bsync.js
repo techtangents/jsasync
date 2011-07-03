@@ -31,6 +31,13 @@ Ephox.core.module.define("techtangents.jsasync.Bsync", [], function(api) {
                 asy(a)(Either.foldOn(passCallback, failCallback));
             });
         };
+
+        /** amap :: this Bsync a p f -> [a] -> Bfuture [p] (Either p f) */
+        me.amap = function(input) {
+            var futures = Util.arrayMap(input, me);
+            return Bfuture.par(futures);
+        };
+
         return me;
     };
 
