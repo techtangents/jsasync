@@ -70,3 +70,9 @@ var assertArrayOfEitherEquals = function(as, bs) {
     jssert.assertEq(as.length, bs.length);
     forEaches(as, bs, assertEitherEquals);
 };
+
+var sift = function(inputs, pred) {
+    return inputs.map(function(a) {
+        return Either[pred(a) ? "good" : "bad"](a);
+    });
+};

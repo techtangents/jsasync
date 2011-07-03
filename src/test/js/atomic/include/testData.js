@@ -6,6 +6,8 @@ var plus1 = Async.async(function(a, callback) {
     callback(a + 1);
 });
 
+var gte2 = function(a) { return a >= 2; };
+
 var suffixQ = Async.async(function(a, callback) {
     callback(a + "q")
 });
