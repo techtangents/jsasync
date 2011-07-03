@@ -9,19 +9,19 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
     var Either  = techtangents.jsasync.util.Either;
     var Util    = techtangents.jsasync.util.Util;
 
+    var bf = function(f) {
+        return function(x) {
+            return bfuture(function(passCb, failCb){
+                f(x, passCb, failCb);
+            });
+        };
+    };
+
     /** bfuture :: ((p -> (), f -> ()) -> ()) -> Bfuture p f */
     var bfuture = function(f) {
 
         // TODO: validate input?
         var me = Util.wrap(f);
-
-        var bf = function(f) {
-            return function(x) {
-                return bfuture(function(passCb, failCb){
-                    f(x, passCb, failCb);
-                });
-            };
-        };
 
         /** this Bfuture a f -> (a -> b) -> Bfuture b f */
         me.map = bf(function(mapper, passCb, failCb) {
@@ -78,11 +78,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
     };
 
     var knst = function(picker) {
-        return function(a) {
-            return bfuture(function(passCb, failCb) {
-                picker(passCb, failCb)(a);
-            });
-        };
+        return bf(function(a, passCb, failCb) {
+            picker(passCb, failCb)(a);
+        });
     };
 
     /** TODO: type sig */
