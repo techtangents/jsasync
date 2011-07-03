@@ -36,19 +36,13 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         me[">>="] = me.bind;
 
         /** bindAnon :: this Bfuture a f -> Bfuture b f -> Bfuture b f
-         *  Note: (this Bfuture a) is strict - it is evaluated and the result discarded.
+         *  Note: (this Bfuture a f) is strict - it is evaluated and the result discarded.
          *  This allows side effects to be chained.
          */
-        // TODO test
-        me.bindAnon = function(futureB) {
-            // TODO: I think this is: return me.bind(Util.konst(futureB));
-            return me.bind(function(_) {
-                return futureB;
-            });
-        };
+        me.bindAnon = Util.compose(me.bind)(Util.konst);
         me[">>"] = me.bindAnon;
 
-        /** TODO type sig */
+        /** toFutureEither :: this Bfuture p f -> Future (Either p f) */
         me.toFutureEither = function() {
             return Future.future(function(callback) {
                 var cb = Util.compose(callback);
