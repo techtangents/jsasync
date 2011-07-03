@@ -1,5 +1,5 @@
 jssert.assertEq(undefined, this.stacked);
-var stacked = techtangents.jsasync.Api.stacked;
+var stacked = techtangents.jsasync.api.stacked;
 
 jssert.assertEq(undefined, this.Async);
 var Async = stacked.Async;

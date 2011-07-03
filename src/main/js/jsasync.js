@@ -11,5 +11,5 @@ Ephox.core.include.require("jsasync", [
     "include/bits/Bsync.js",
 
     "include/glue/Library.js",
-    "include/Api.js"
+    "include/api.js"
 ]);
