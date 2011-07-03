@@ -2,7 +2,7 @@ Ephox.core.module.define("techtangents.jsasync.glue.Library", [], function(api) 
 
     var Util = techtangents.jsasync.util.Util;
 
-    var create = function(strategy) {
+    var create = function(executor) {
         var base = techtangents.jsasync.bits;
         var bits = {
             Async: base.Async,
@@ -12,7 +12,7 @@ Ephox.core.module.define("techtangents.jsasync.glue.Library", [], function(api) 
         };
 
         return Util.objectMap(bits, function(bit) {
-            return bit.create(strategy);
+            return bit.create(executor);
         });
     };
 

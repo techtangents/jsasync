@@ -1,13 +1,12 @@
 Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, _private) {
 
-    // TODO: use strategy
-    var create = function(strategy) {
+    var create = function(executor) {
 
         /** data Bfuture p f :: Bifuture { apply :: (p -> (), f -> ()) -> () };
          *  A Bfuture represents the result of an asynchronous computation which may pass or fail
          *  When invoking a Bfuture, a pass callback and fail callback are passed in.
          *  When the computation is complete, one of the callbacks is called, depdending on the result.
-        */
+         */
 
         var Bpicker = techtangents.jsasync.util.Bpicker;
         var Either  = techtangents.jsasync.util.Either;
@@ -25,7 +24,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         var bfuture = function(f) {
 
             // TODO: validate input?
-            var me = strategy(f);
+            var me = executor(f);
 
             /** this Bfuture a f -> (a -> b) -> Bfuture b f */
             me.map = bf(function(mapper, passCb, failCb) {

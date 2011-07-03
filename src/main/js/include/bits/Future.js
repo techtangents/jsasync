@@ -1,6 +1,6 @@
 Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
 
-    var create = function(strategy) {
+    var create = function(executor) {
 
         /** data Future = Future { apply :: (b -> ()) -> () }
          *  A Future represents the future result of an asnchronous computation.
@@ -18,7 +18,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
         var future = function future(f) {
 
             /** (function application) :: this Future a -> (a => ()) -> () */
-            var me = strategy(f);
+            var me = executor(f);
 
             /** map :: this Future a -> (a -> b) -> Future b */
             me.map = function(mapper) {
