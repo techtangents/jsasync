@@ -95,6 +95,16 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     /** chainConst :: ((b -> a) -> c) -> a -> c */
     var chainConst = chain(konst);
 
+    var bounce = function(f) {
+        return function() {
+            var thisArg = this;
+            var args = arguments;
+            setTimeout(1, function() {
+                f.apply(thisArg, args);
+            });
+        };
+    };
+
     api.flip = flip;
     api.flipUncurried = flipUncurried;
     api.compose = compose;
@@ -108,4 +118,5 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.objectMap = objectMap;
     api.identity = identity;
     api.chainConst = chainConst;
+    api.bounce = bounce;
 });

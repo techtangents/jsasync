@@ -1,7 +1,6 @@
 Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
-    // TODO: use strategy
-    var create = function(strategy) {
+    var create = function(executor) {
 
         /** A Bsync represents an asynchronous computation which may "succeed" or "fail".
          *  Applying an argument to a Bsync generates a Bfuture.
@@ -16,8 +15,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         var Either  = techtangents.jsasync.util.Either;
         var Bpicker = techtangents.jsasync.util.Bpicker;
 
-        var Async   = techtangents.jsasync.bits.Async.create(strategy);
-        var Bfuture = techtangents.jsasync.bits.Bfuture.create(strategy);
+        var Async   = techtangents.jsasync.bits.Async.create(executor);
+        var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor);
 
         // FIX: Figure out what type classes this should implement
 

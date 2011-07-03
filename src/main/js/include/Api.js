@@ -1,18 +1,8 @@
 Ephox.core.module.define("techtangents.jsasync.Api", [], function(api) {
 
     var Library = techtangents.jsasync.glue.Library;
+    var Util = techtangents.jsasync.util.Util;
 
-    var stack = function(f) {
-        f();
-    };
-
-    var bounce = function(f) {
-        setTimeout(1, f);
-    };
-
-    var Stacked = Library.create(stack);
-    var Bounced = Library.create(bounce);
-
-    api.Stacked = Stacked;
-    api.Bounced = Bounced;
+    api.stacked = Library.create(Util.wrap);
+    api.bounced = Library.create(Util.bounce);
 });

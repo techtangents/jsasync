@@ -25,7 +25,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         var bfuture = function(f) {
 
             // TODO: validate input?
-            var me = Util.wrap(f);
+            var me = strategy(f);
 
             /** this Bfuture a f -> (a -> b) -> Bfuture b f */
             me.map = bf(function(mapper, passCb, failCb) {

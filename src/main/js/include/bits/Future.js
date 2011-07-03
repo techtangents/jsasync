@@ -1,6 +1,5 @@
 Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
 
-    // TODO: use strategy
     var create = function(strategy) {
 
         /** data Future = Future { apply :: (b -> ()) -> () }
@@ -19,7 +18,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
         var future = function future(f) {
 
             /** (function application) :: this Future a -> (a => ()) -> () */
-            var me = Util.wrap(f);
+            var me = strategy(f);
 
             /** map :: this Future a -> (a -> b) -> Future b */
             me.map = function(mapper) {
