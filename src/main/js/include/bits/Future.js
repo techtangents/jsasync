@@ -21,9 +21,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
         /** map :: this Future a -> (a -> b) -> Future b */
         me.map = function(mapper) {
             return future(function(callback) {
-                f(function(a) {
-                    callback(mapper(a));
-                });
+                f(Util.compose(callback)(mapper));
             });
         };
         me["<$>"] = me.map;
