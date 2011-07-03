@@ -1,9 +1,9 @@
 Ephox.core.module.define("techtangents.jsasync.util.Bpicker", [], function(api) {
-    var pass = function(ifPass, ifFail) {
+    var pass = function(ifPass, _) {
         return ifPass;
     };
 
-    var fail = function(ifPass, ifFail) {
+    var fail = function(_, ifFail) {
         return ifFail;
     };
 
