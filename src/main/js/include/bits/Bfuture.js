@@ -15,24 +15,28 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         // TODO: validate input?
         var me = Util.wrap(f);
 
-        /** this Bfuture a f -> (a -> b) -> Bfuture b f */
-        me.map = function(mapper) {
-            return bfuture(function(passCb, failCb) {
-                me(Util.compose(passCb)(mapper), failCb);
-            });
+        var bf = function(f) {
+            return function(x) {
+                return bfuture(function(passCb, failCb){
+                    f(x, passCb, failCb);
+                });
+            };
         };
+
+        /** this Bfuture a f -> (a -> b) -> Bfuture b f */
+        me.map = bf(function(mapper, passCb, failCb) {
+            me(Util.compose(passCb)(mapper), failCb);
+        });
         me["<$>"] = me.map;
 
         /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
          *  Note: a Bsync a f is an (a -> Bfuture b f)
          */
-        me.bind = function(binder) {
-            return bfuture(function(passCb, failCb) {
-                me(function(p) {
-                    binder(p)(passCb, failCb);
-                }, failCb);
-            });
-        };
+        me.bind = bf(function(binder, passCb, failCb) {
+            me(function(p) {
+                binder(p)(passCb, failCb);
+            }, failCb);
+        });
         me[">>="] = me.bind;
 
         /** bindAnon :: this Bfuture a f -> Bfuture b f -> Bfuture b f
