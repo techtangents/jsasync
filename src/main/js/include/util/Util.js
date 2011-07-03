@@ -21,7 +21,7 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     /** wrap :: function -> function */
     function wrap(f) {
         return function() {
-            f.apply(this, arguments);
+            return f.apply(this, arguments);
         };
     }
 
