@@ -43,6 +43,14 @@ var forEach2WithSpy = function(as, bs, f) {
     });
 };
 
+var forEach3 = function(as, bs, cs, f) {
+    forEach2(as, bs, function(a, b) {
+        cs.forEach(function(c) {
+            f(a, b, c);
+        });
+    });
+};
+
 var forEach2WithSpy_ = de(forEach2WithSpy);
 
 var assertEitherEquals = function(a, b) {
