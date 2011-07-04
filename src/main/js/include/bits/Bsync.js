@@ -18,8 +18,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         var Async   = techtangents.jsasync.bits.Async.create(executor);
         var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor);
 
-        // FIX: Figure out what type classes this should implement
-
         /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f
          *  bsync(function(a, passCb, failCb){});
          */
