@@ -30,11 +30,27 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
             // TODO :: lots of functions here
 
+            /** compose/<<< :: Bsync b c f -> Bsync a b f -> Bsync a c f */
+            var compose = function(bcf) {
+                return function(abf) {
+                    return Bsync.bsync(function(a, passCb, failCb) {
+                        abf(a)(function(b) {
+                            bcf(b)(passCb, failCb);
+                        }, failCb);
+                    });
+                };
+            };
+
+            /** chain :: Bsync a b f -> Bsync b c f -> Bsync a c f */
+            var chain = Util.flip(compose);
+
             /** chain/>>> :: this Bsync a b f -> Bsync b c f -> Bsync a c f */
-            // TODO
+            me.chain = chain(me);
+            me[">>>"] = me.chain;
 
             /** compose/<<< :: this Bsync b c f -> Bsync a b f -> Bsync a c f */
-            // TODO
+            me.compose = compose(me);
+            me["<<<"] = me.compose;
 
             /** map :: this Bsync a b f -> (b -> c) -> Bsync a c f */
             // TODO
