@@ -28,12 +28,15 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             me["<<^"] = me.mapIn;
 
             /** mapOut :: this Async a b -> (b -> c) -> Async a c */
+            // TODO - this should just be map, as Async a is a functor
             me.mapOut = function(mapper) {
                 return Async.async(function(a, callback) {
                     me(a)(Util.compose(callback)(mapper));
                 });
             };
             me[">>^"] = me.mapOut;
+
+            // TODO functions to convert to pass/fail Bsyncs
 
             // TODO compose and chain could do with a few more tests
 
@@ -57,6 +60,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             me.chain = chain(me);
             me[">>>"] = me.chain;
 
+            // TODO: implement ap/<*> if possible
+
             /** Returns a Future that performs this Async over each element of the input array.
              *  amap :: this Async a b -> [a] -> Future [b]
              */
@@ -77,6 +82,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
 
         /** constant :: b -> Async a b */
         var constant = Util.compose(sync)(Util.konst);
+
+        // TODO function to compose/chain an array of Asyncs
 
         return {
             async: async,

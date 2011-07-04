@@ -28,6 +28,46 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 });
             };
 
+            // TODO :: lots of functions here
+
+            /** chain/>>> :: this Bsync a b f -> Bsync b c f -> Bsync a c f */
+            // TODO
+
+            /** compose/<<< :: this Bsync b c f -> Bsync a b f -> Bsync a c f */
+            // TODO
+
+            /** map :: this Bsync a b f -> (b -> c) -> Bsync a c f */
+            // TODO
+
+            /** mapIn :: this Bsync b c f -> (a -> b) -> Bsync a c f */
+            // TODO
+
+            /** ap/<*> :: this Bsync a b f -> Bsync a (b -> c) f -> Bsync a c f
+             *  Bsync * * f is an arrow, thus Bsync a * f is an applicative
+             *  TODO ^^^ is this right?
+             */
+
+            /** mapFail :: this Bsync a b f -> (f -> g) -> Bsync a b g */
+            // TODO
+
+            /** negate :: this Bsync a b f -> Bsync a f b */
+            // TODO
+
+            /** alwaysPass :: this Bsync a b b -> Bsync a b f */
+            // TODO
+
+            /** alwaysFail :: this Bsync a b b -> Bsync a p b */
+            // TODO
+
+            /** mapInAsync :: this Bsync b p f -> Async a b -> Bsync a p f */
+            // TODO
+
+            /** mapAsyncPass :: this Bsync a b f -> Async b c -> Bsync a c f */
+            // TODO
+
+            /** mapAsyncFail :: this Bsync a p f -> Async f g -> Bsync a p g
+            // TODO
+
             /** amap :: this Bsync a p f -> [a] -> Bfuture [p] (Either p f) */
             me.amap = function(input) {
                 var futures = Util.arrayMap(input, me);
@@ -69,6 +109,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 (pred(a) ? passCb : failCb)(a);
             });
         };
+
+        // TODO: function that composes/chains an array of Bsyncs
 
         return {
             bsync: bsync,
