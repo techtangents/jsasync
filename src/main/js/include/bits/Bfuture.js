@@ -63,22 +63,20 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         /** Compose an array of futures.
          *  par :: [Bfuture p f] -> Bfuture [p] [Either p f]
          */
-        var par = function(futures) {
-            return bfuture(function(passCb, failCb) {
-                var feithers = Util.arrayMap(futures, function(fut) {
-                    return fut.toFutureEither();
-                });
-                Future.par(feithers)(function(results) {
-                    var goods = Either.goods(results);
-                    var weWin = results.length === goods.length;
-                    if (weWin) {
-                        passCb(goods);
-                    } else {
-                        failCb(results);
-                    }
-                });
+        var par = bf(function(futures, passCb, failCb) {
+            var feithers = Util.arrayMap(futures, function(fut) {
+                return fut.toFutureEither();
             });
-        };
+            Future.par(feithers)(function(results) {
+                var goods = Either.goods(results);
+                var weWin = results.length === goods.length;
+                if (weWin) {
+                    passCb(goods);
+                } else {
+                    failCb(results);
+                }
+            });
+        });
 
         var knst = function(picker) {
             return bf(function(a, passCb, failCb) {
