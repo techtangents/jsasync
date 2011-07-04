@@ -20,7 +20,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
         // FIX: Figure out what type classes this should implement
 
-        /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f */
+        /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f
+         *  bsync(function(a, passCb, failCb){});
+         */
         var bsync = function(f) {
 
             // A Bsync is implemented in terms of an Async (Either p f)

@@ -99,9 +99,9 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         return function() {
             var thisArg = this;
             var args = arguments;
-            setTimeout(1, function() {
+            setTimeout(function() {
                 f.apply(thisArg, args);
-            });
+            }, 1);
         };
     };
 
