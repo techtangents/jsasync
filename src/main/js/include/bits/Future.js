@@ -23,7 +23,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
             /** map :: this Future a -> (a -> b) -> Future b */
             me.map = function(mapper) {
                 return future(function(callback) {
-                    f(Util.compose(callback)(mapper));
+                    me(Util.compose(callback)(mapper));
                 });
             };
             me["<$>"] = me.map;
@@ -44,11 +44,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
              *  Note: (this Future a) is strict - it is evaluated and the result discarded.
              *  This allows side effects to be chained.
              */
-            me.bindAnon = function(futureB) {
-                return me.bind(function(_) {
-                    return futureB;
-                });
-            };
+            me.bindAnon = Util.compose(me.bind)(Util.konst);
             me[">>"] = me.bindAnon;
 
             return me;
