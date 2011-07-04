@@ -76,3 +76,48 @@ var sift = function(inputs, pred) {
         return Either[pred(a) ? "good" : "bad"](a);
     });
 };
+
+var delayed = function(f) {
+    importClass(java.lang.Thread);
+    importClass(java.lang.Runnable);
+
+    var thread;
+
+    var f2 = function() {
+        var thisArg = this;
+        var args = arguments;
+        var r;
+
+        thread = new Thread(new Runnable({
+            run: function() {
+                r = f.apply(thisArg, args);
+            }
+        }));
+        thread.setDaemon(true);
+        thread.start();
+        Thread.sleep(Math.random() * 200);
+        thread.join();
+        return r;
+    };
+
+    f2.join = function() {
+        thread.join();
+    };
+    return f2;    
+};
+
+
+
+var setTimeout = function(f, delay) {
+    importClass(java.lang.Thread);
+    importClass(java.lang.Runnable);
+
+    Thread.sleep(delay);
+    new Thread(new Runnable({
+        run: function() {
+            f();
+        }
+    })).start();
+};
+
+
