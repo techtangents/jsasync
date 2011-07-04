@@ -77,30 +77,12 @@ var sift = function(inputs, pred) {
     });
 };
 
-var delayed = function(f) {
-    importClass(java.lang.Thread);
-    importClass(java.lang.Runnable);
-
-    return function(cb) {
-        var thisArg = this;
-        var args = arguments;
-        var r;
-
-        var thread = new Thread(new Runnable({
-            run: function() {
-                cb(f.apply(thisArg, args));
-            }
-        }));
-        thread.setDaemon(true);
-        thread.start();
-    };
-};
+importClass(java.lang.Thread);
+importClass(java.lang.Runnable);
 
 var waitFor = function(condition) {
-    importClass(java.lang.Thread);
-
     var elapsed = 0;
-    var delta = 30;
+    var delta = 10;
     while(!condition() || elapsed < 6000) {
         Thread.sleep(delta);
         elapsed += delta;
@@ -108,18 +90,17 @@ var waitFor = function(condition) {
     jssert.assertEq(true, condition());
 };
 
-var doSetTimeout = function(f, delay) {
-    importClass(java.lang.Thread);
-    importClass(java.lang.Runnable);
-
-    Thread.sleep(delay);
-    new Thread(new Runnable({
-        run: function() {
-            f();
-        }
-    })).start();
-};
+var randomSleep = function() {
+    Thread.sleep(Math.random() * 20);
+}
 
 var setTimeout = function(f, delay) {
-    doSetTimeout(f, Math.random() * 200);
+    var thread = new Thread(new Runnable({
+        run: function() {
+            randomSleep();
+            f();
+        }
+    }));
+    thread.setDaemon(true);
+    thread.start();
 };
