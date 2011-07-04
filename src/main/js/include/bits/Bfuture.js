@@ -27,27 +27,24 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
             var me = executor(f);
 
             /** this Bfuture a f -> (a -> b) -> Bfuture b f */
-            me.map = bf(function(mapper, passCb, failCb) {
+            me.map = me["<$>"] = bf(function(mapper, passCb, failCb) {
                 me(Util.compose(passCb)(mapper), failCb);
             });
-            me["<$>"] = me.map;
 
             /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
              *  Note: a Bsync a f is an (a -> Bfuture b f)
              */
-            me.bind = bf(function(binder, passCb, failCb) {
+            me.bind = me[">>="] = bf(function(binder, passCb, failCb) {
                 me(function(p) {
                     binder(p)(passCb, failCb);
                 }, failCb);
             });
-            me[">>="] = me.bind;
 
             /** bindAnon :: this Bfuture a f -> Bfuture b f -> Bfuture b f
              *  Note: (this Bfuture a f) is strict - it is evaluated and the result discarded.
              *  This allows side effects to be chained.
              */
-            me.bindAnon = Util.compose(me.bind)(Util.konst);
-            me[">>"] = me.bindAnon;
+            me.bindAnon = me[">>"] = Util.compose(me.bind)(Util.konst);
 
             /** toFutureEither :: this Bfuture p f -> Future (Either p f) */
             me.toFutureEither = Util.curry0(toFutureEither)(me);

@@ -15,7 +15,7 @@ var testCompose = withSpy_(function(spy) {
     spy.verifyArgs([["4"]]);
 });
 
-var testMapOut = forEachWithSpy_(["mapOut", ">>^"], function(fnName, spy) {
+var testMap = forEachWithSpy_(["map", ">>^", "<$>"], function(fnName, spy) {
     plus1[fnName](function(a) { return a + 2; })(1)(spy);
     spy.verifyArgs([[4]]);
 });

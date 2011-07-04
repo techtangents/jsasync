@@ -20,32 +20,29 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
             /** (function application) :: this Future a -> (a => ()) -> () */
             var me = executor(f);
 
-            /** map :: this Future a -> (a -> b) -> Future b */
-            me.map = function(mapper) {
+            /** map/<$> :: this Future a -> (a -> b) -> Future b */
+            me.map = me["<$>"] = function(mapper) {
                 return future(function(callback) {
                     me(Util.compose(callback)(mapper));
                 });
             };
-            me["<$>"] = me.map;
 
-            /** bind :: this Future a -> (a -> Future b) -> Future b
+            /** bind/>>= :: this Future a -> (a -> Future b) -> Future b
              *  Note: an Async is an (a -> Future b)
              */
-            me.bind = function(aToFutureB) {
+            me.bind = me[">>="] = function(aToFutureB) {
                 return future(function(callback) {
                     me(function(a) {
                         aToFutureB(a)(callback);
                     });
                 });
             };
-            me[">>="] = me.bind;
 
             /** bindAnon :: this Future a -> Future b -> Future b
              *  Note: (this Future a) is strict - it is evaluated and the result discarded.
              *  This allows side effects to be chained.
              */
-            me.bindAnon = Util.compose(me.bind)(Util.konst);
-            me[">>"] = me.bindAnon;
+            me.bindAnon = me[">>"] = Util.compose(me.bind)(Util.konst);
 
             return me;
         };

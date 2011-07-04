@@ -19,22 +19,22 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
                 });
             };
 
-            /** mapIn :: this Async b c -> (a -> b) -> Async a c */
-            me.mapIn = function(mapper) {
+            /** mapIn/<<^ :: this Async b c -> (a -> b) -> Async a c */
+            me.mapIn = me["<<^"] = function(mapper) {
                 return Async.async(function(b, callback) {
                     me(mapper(b))(callback);
                 });
             };
-            me["<<^"] = me.mapIn;
 
-            /** mapOut :: this Async a b -> (b -> c) -> Async a c */
-            // TODO - this should just be map, as Async a is a functor
-            me.mapOut = function(mapper) {
+            /** map/>>^/<$> :: this Async a b -> (b -> c) -> Async a c */
+            me.map = me[">>^"] = me["<$>"] = function(mapper) {
                 return Async.async(function(a, callback) {
                     me(a)(Util.compose(callback)(mapper));
                 });
             };
-            me[">>^"] = me.mapOut;
+
+            /** ap/<*> Async a b -> Async a (b -> c) -> Async a c */
+            // TODO
 
             // TODO functions to convert to pass/fail Bsyncs
 
@@ -59,8 +59,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             /** chain :: this Async a b -> Async b c -> Async a c */
             me.chain = chain(me);
             me[">>>"] = me.chain;
-
-            // TODO: implement ap/<*> if possible
 
             /** Returns a Future that performs this Async over each element of the input array.
              *  amap :: this Async a b -> [a] -> Future [b]

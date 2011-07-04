@@ -30,7 +30,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
             // TODO :: lots of functions here
 
-            /** compose/<<< :: Bsync b c f -> Bsync a b f -> Bsync a c f */
+            /** compose :: Bsync b c f -> Bsync a b f -> Bsync a c f */
             var compose = function(bcf) {
                 return function(abf) {
                     return Bsync.bsync(function(a, passCb, failCb) {
@@ -45,12 +45,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             var chain = Util.flip(compose);
 
             /** chain/>>> :: this Bsync a b f -> Bsync b c f -> Bsync a c f */
-            me.chain = chain(me);
-            me[">>>"] = me.chain;
+            me.chain = me[">>>"] = chain(me);
 
             /** compose/<<< :: this Bsync b c f -> Bsync a b f -> Bsync a c f */
-            me.compose = compose(me);
-            me["<<<"] = me.compose;
+            me.compose = me["<<<"] = compose(me);
 
             /** map :: this Bsync a b f -> (b -> c) -> Bsync a c f */
             // TODO
