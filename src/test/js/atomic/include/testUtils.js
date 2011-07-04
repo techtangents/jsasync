@@ -106,9 +106,7 @@ var delayed = function(f) {
     return f2;    
 };
 
-
-
-var setTimeout = function(f, delay) {
+var doSetTimeout = function(f, delay) {
     importClass(java.lang.Thread);
     importClass(java.lang.Runnable);
 
@@ -120,4 +118,6 @@ var setTimeout = function(f, delay) {
     })).start();
 };
 
-
+var setTimeout = function(f, delay) {
+    doSetTimeout(f, Math.random() * 200);
+};

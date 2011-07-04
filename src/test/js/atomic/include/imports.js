@@ -17,4 +17,4 @@ jssert.assertEq(undefined, this.Either);
 var Either = techtangents.jsasync.util.Either;
 
 jssert.assertEq(undefined, this.Util);
-var Either = techtangents.jsasync.util.Util;
+var Util = techtangents.jsasync.util.Util;

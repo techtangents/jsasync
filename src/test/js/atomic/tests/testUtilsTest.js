@@ -3,7 +3,7 @@ require("../include/include.js");
 function testSetTimeout() {
     var done = false;
 
-    setTimeout(function() {
+    doSetTimeout(function() {
         done = true;
     }, 100);
 

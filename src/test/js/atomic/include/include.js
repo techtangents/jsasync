@@ -5,5 +5,5 @@
     "../../../../../lib/test/jssert.js",
     "imports.js",
     "testData.js",
-    "testutils.js"
+    "testUtils.js"
 ].forEach(require);
