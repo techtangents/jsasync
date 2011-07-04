@@ -91,8 +91,8 @@ var waitFor = function(condition) {
 };
 
 var randomSleep = function() {
-    Thread.sleep(Math.random() * 20);
-}
+    Thread.sleep(Math.random() * 15);
+};
 
 var setTimeout = function(f, delay) {
     var thread = new Thread(new Runnable({

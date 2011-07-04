@@ -6,13 +6,11 @@ function test() {
 
     [0, 1, 2, 10].forEach(function(num){
         var fs = [];
-        var dones = [];
         var expected = [];
 
         var mk = function(i) {
             // 'sync' is a rhino function that gives you some java synchronization
             return bounceyFuture.future(sync(function(cb) {
-                dones[i] = true;
                 cb(i);
             }));
         };
@@ -28,12 +26,8 @@ function test() {
         });
 
         waitFor(function() {
-            for (var i = 0; i < num; i++) {
-                if (!dones[i]) return false;
-            }
-            return true;
+            return actual !== undefined;
         });
         jssert.assertEq(expected, actual);
-
     });
 }
