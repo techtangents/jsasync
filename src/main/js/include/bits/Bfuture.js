@@ -50,27 +50,26 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
             me[">>"] = me.bindAnon;
 
             /** toFutureEither :: this Bfuture p f -> Future (Either p f) */
-            me.toFutureEither = function() {
-                return Future.future(function(callback) {
-                    var cb = Util.compose(callback);
-                    f(cb(Either.good), cb(Either.bad));
-                });
-            };
+            me.toFutureEither = Util.curry0(toFutureEither)(me);
 
             return me;
+        };
+
+        var toFutureEither = function(fut) {
+            return Future.future(function(callback) {
+                var cb = Util.compose(callback);
+                fut(cb(Either.good), cb(Either.bad));
+            });
         };
 
         /** Compose an array of futures.
          *  par :: [Bfuture p f] -> Bfuture [p] [Either p f]
          */
         var par = bf(function(futures, passCb, failCb) {
-            var feithers = Util.arrayMap(futures, function(fut) {
-                return fut.toFutureEither();
-            });
+            var feithers = Util.arrayMap(futures, toFutureEither);
             Future.par(feithers)(function(results) {
                 var goods = Either.goods(results);
-                var weWin = results.length === goods.length;
-                if (weWin) {
+                if (results.length === goods.length) {
                     passCb(goods);
                 } else {
                     failCb(results);

@@ -105,6 +105,14 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
+    var curry0 = function(f) {
+        return function(a) {
+            return function() {
+                return f(a);
+            };
+        };
+    };
+
     api.flip = flip;
     api.flipUncurried = flipUncurried;
     api.compose = compose;
@@ -119,4 +127,5 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.identity = identity;
     api.chainConst = chainConst;
     api.bounce = bounce;
+    api.curry0 = curry0;
 });
