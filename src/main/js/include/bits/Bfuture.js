@@ -61,7 +61,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         };
 
         /** Compose an array of futures.
-         *  par :: [Bfuture p f] -> Bfuture [a] [Either p f]
+         *  par :: [Bfuture p f] -> Bfuture [p] [Either p f]
          */
         var par = function(futures) {
             return bfuture(function(passCb, failCb) {
