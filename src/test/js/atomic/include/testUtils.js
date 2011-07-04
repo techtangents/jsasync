@@ -17,6 +17,12 @@ var withSpy_ = de(withSpy);
 
 var explode = function() { throw "kaboom!"; };
 
+var forEach = function(as, f) {
+    as.forEach(f);
+};
+
+var forEach_ = de(forEach);
+
 var forEach2 = function(as, bs, f) {
     as.forEach(function(a) {
         bs.forEach(function(b) {
@@ -50,6 +56,8 @@ var forEach3 = function(as, bs, cs, f) {
         });
     });
 };
+
+var forEach3_ = de(forEach3);
 
 var forEach2WithSpy_ = de(forEach2WithSpy);
 
