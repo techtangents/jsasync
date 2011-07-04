@@ -81,29 +81,31 @@ var delayed = function(f) {
     importClass(java.lang.Thread);
     importClass(java.lang.Runnable);
 
-    var thread;
-
-    var f2 = function() {
+    return function(cb) {
         var thisArg = this;
         var args = arguments;
         var r;
 
-        thread = new Thread(new Runnable({
+        var thread = new Thread(new Runnable({
             run: function() {
-                r = f.apply(thisArg, args);
+                cb(f.apply(thisArg, args));
             }
         }));
         thread.setDaemon(true);
         thread.start();
-        Thread.sleep(Math.random() * 200);
-        thread.join();
-        return r;
     };
+};
 
-    f2.join = function() {
-        thread.join();
-    };
-    return f2;    
+var waitFor = function(condition) {
+    importClass(java.lang.Thread);
+
+    var elapsed = 0;
+    var delta = 30;
+    while(!condition() || elapsed < 6000) {
+        Thread.sleep(delta);
+        elapsed += delta;
+    }
+    jssert.assertEq(true, condition());
 };
 
 var doSetTimeout = function(f, delay) {

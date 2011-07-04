@@ -7,23 +7,24 @@ function testSetTimeout() {
         done = true;
     }, 100);
 
-    var elapsed = 0;
-    var delta = 50;
-    while(!done || elapsed < 6000) {
-        java.lang.Thread.sleep(delta);
-        elapsed += delta;
-    }
-    jssert.assertEq(true, done);
+    waitFor(function() {
+        return done;
+    });
 }
 
 function testDelayed() {
+    var done = false;
+
     var q = delayed(function(x) {
+        done = true;
         return x + 2;
     });
 
     var spy = jssert.spy();
     var f = Async.sync(q)(2)(spy);
 
-    q.join();
+    waitFor(function() {
+        return done;
+    });
     spy.verifyArgs([[4]]);
 }
