@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 /* Note: these tests are actually synchronous, but still test the callback mechanism.
  * If we start bouncing the functions with setTimeout, these tests will break.

@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testConstant = forEachWithSpy_(testInts, function(input, spy) {
     Bfuture.constant(input)(spy, explode);

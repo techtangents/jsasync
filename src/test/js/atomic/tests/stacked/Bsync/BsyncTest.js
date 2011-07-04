@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testPass = forEach2WithSpy_(testFunctionsFromInt, testInts, function(f, input, spy) {
     var bs = Bsync.bsync(function(a, passCb, failCb) {

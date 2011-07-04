@@ -1,4 +1,4 @@
-require("../include/include.js");
+require("../../include/include.js");
 
 function testSetTimeout() {
     var done = false;

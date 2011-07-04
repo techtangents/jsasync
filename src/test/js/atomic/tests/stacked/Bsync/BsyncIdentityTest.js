@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testIdentity = forEachWithSpy_(testValues, function(x, spy) {
     Bsync.identity(x)(spy, explode);

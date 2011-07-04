@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testBindPassPass = forEach2WithSpy_(testFunctionsFromInt, testInts, function(f, input, spy) {
     Bfuture.constant(input).bind(Bsync.sync(f))(spy, explode);

@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testBsyncConstant = forEach2WithSpy_(testInts, testInts, function(ignored, input, spy) {
     Bsync.constant(input)(ignored)(spy, explode);

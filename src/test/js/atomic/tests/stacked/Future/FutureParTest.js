@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testParOverConstant = forEachWithSpy_(testArrays, function(array, spy) {
     var futures = array.map(Future.constant);

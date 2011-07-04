@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testPredicate = forEachWithSpy_(testInts, function(inputs_, spy) {
     var inputs = [1].concat(inputs_); // so there's always a fail

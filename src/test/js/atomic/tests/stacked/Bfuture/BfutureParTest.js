@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testParConstants = forEachWithSpy_(testArrays, function(input, spy) {
     var futures = input.map(Bfuture.constant);

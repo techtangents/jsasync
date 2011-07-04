@@ -1,4 +1,4 @@
-require("../../include/include.js");
+require("../../../include/include.js");
 
 var testBind = forEachWithSpy_(testInts, function(x, spy) {
     plus1(x) [">>="] (sz) [">>="] (suffixQ)(spy);
