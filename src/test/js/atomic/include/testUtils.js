@@ -78,7 +78,7 @@ var permute2_ = de(permute2);
 
 var forEaches = function(as, bs, f) {
     for (var i = 0; i < Math.min(as.length, bs.length); i++) {
-        f(a, b);
+        f(as[i], bs[i]);
     }
 };
 

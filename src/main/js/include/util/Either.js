@@ -15,7 +15,10 @@ Ephox.core.module.define("techtangents.jsasync.util.Either", [], function(api, _
                 return good(mapper(g));
             },
             isGood : Util.konst(true),
-            goodOrDie: Util.konst(g)
+            goodOrDie: Util.konst(g),
+            badOrDie: function() {
+                throw "badOrDie called on Either.good";
+            }
         };
     };
 
@@ -27,10 +30,11 @@ Ephox.core.module.define("techtangents.jsasync.util.Either", [], function(api, _
             map: function(_) {
                 return bad(b);
             },
-            isGood : Util.konst(false),
-            goodOrDie : function() {
+            isGood: Util.konst(false),
+            goodOrDie: function() {
                 throw "goodOrDie called on Either.bad"
-            }
+            },
+            badOrDie: Util.konst(b)
         };
     };
 
