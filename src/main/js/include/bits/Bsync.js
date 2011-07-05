@@ -183,7 +183,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         var chainMany = function(as) {
             // TODO: this is a reduce
             // TODO: validate?
-            var r = identity();
+            var r = identity;
             Util.arrayEach(as, function(a) {
                 r = r[">>>"](a);
             });
@@ -194,7 +194,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             // TODO: this is a reduce
             // TODO: validate?
             // TODO: refactor against chainMany
-            var r = identity();
+            var r = identity;
             Util.arrayEach(as, function(a) {
                 r = r["<<<"](a);
             });
