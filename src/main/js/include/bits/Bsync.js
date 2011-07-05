@@ -28,8 +28,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 });
             };
 
-            // TODO :: lots of functions here
-
             /** compose :: Bsync b c f -> Bsync a b f -> Bsync a c f */
             var compose = function(bcf) {
                 return function(abf) {
@@ -54,12 +52,28 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             me.map = me[">>^"] = me["<$>"] = Util.compose(me[">>>"])(sync);
 
             /** mapIn :: this Bsync b c f -> (a -> b) -> Bsync a c f */
-            // TODO
+            // TODO alias
+            // TODO test
+            // TODO refactor function(a) { return bsync(function(a, passCb, failCb) { ...}); });
+            me.mapIn = me["<<^"] = function(fab) {
+                return bsync(function(a, passCb, failCb) {
+                    me(fab(a))(passCb, failCb);
+                });
+            };
 
             /** ap/<*> :: this Bsync a b f -> Bsync a (b -> c) f -> Bsync a c f
              *  Bsync * * f is an arrow, thus Bsync a * f is an applicative
-             *  TODO ^^^ is this right?
              */
+            // TODO test
+            me.ap = me["<*>"] = function(abc) {
+                return bsync(function(a, passCb, failCb) {
+                    me(a)(function(b) {
+                        abc(a)(function(bc) {
+                            passCb(bc(b));
+                        }, failCb);
+                    }, failCb);
+                });
+            };
 
             /** mapFail :: this Bsync a b f -> (f -> g) -> Bsync a b g */
             me.mapFail = me["<!>"] = function(mapper) {
@@ -69,22 +83,59 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             };
 
             /** negate :: this Bsync a b f -> Bsync a f b */
-            // TODO
+            // TODO test
+            me.negate = function() {
+                return bsync(function(a, passCb, failCb) {
+                    me(a)(failCb, passCb);
+                });
+            };
 
             /** alwaysPass :: this Bsync a b b -> Bsync a b f */
-            // TODO
+            // TODO test
+            me.alwaysPass = function() {
+                return bsync(function(a, passCb, _) {
+                    me(a)(passCb, passCb);
+                });
+            };
 
             /** alwaysFail :: this Bsync a b b -> Bsync a p b */
-            // TODO
+            // TODO test
+            // TODO refactor against alwaysFail
+            me.alwaysPass = function() {
+                return bsync(function(a, _, failCb) {
+                    me(a)(failCb, failCb);
+                });
+            };
 
             /** mapInAsync :: this Bsync b p f -> Async a b -> Bsync a p f */
-            // TODO
+            // TODO test
+            me.mapInAsync = function(aab) {
+                return bsync(function(a, passCb, failCb) {
+                    aab(a)(function(b) {
+                        me(b)(passCb, failCb);
+                    });
+                });
+            };
 
             /** mapAsyncPass :: this Bsync a b f -> Async b c -> Bsync a c f */
-            // TODO
+            // TODO test
+            me.mapAsyncPass = function(abc) {
+                return bsync(function(a, passCb, failCb) {
+                    me(a)(function(b) {
+                        abc(b)(passCb);
+                    }, failCb);
+                });
+            };
 
-            /** mapAsyncFail :: this Bsync a p f -> Async f g -> Bsync a p g
-            // TODO
+            /** mapAsyncFail :: this Bsync a p f -> Async f g -> Bsync a p g */
+            // TODO test
+            me.mapAsyncFail = function(afg) {
+                return bsync(function(a, passCb, failCb) {
+                    me(a)(passCb, function(f) {
+                        afg(f)(failCb);
+                    });
+                });
+            };
 
             /** amap :: this Bsync a p f -> [a] -> Bfuture [p] (Either p f) */
             me.amap = function(input) {
@@ -129,6 +180,26 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         };
 
         // TODO: function that composes/chains an array of Bsyncs
+        var chainMany = function(as) {
+            // TODO: this is a reduce
+            // TODO: validate?
+            var r = identity();
+            Util.arrayEach(as, function(a) {
+                r = r[">>>"](a);
+            });
+            return r;
+        };
+
+        var composeMany = function(as) {
+            // TODO: this is a reduce
+            // TODO: validate?
+            // TODO: refactor against chainMany
+            var r = identity();
+            Util.arrayEach(as, function(a) {
+                r = r["<<<"](a);
+            });
+            return r;
+        };
 
         return {
             bsync: bsync,
@@ -138,7 +209,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             faildentity: faildentity,
             constant: constant,
             constantFail: constantFail,
-            predicate: predicate
+            predicate: predicate,
+            chainMany: chainMany,
+            composeMany: composeMany
         };
     };
 
