@@ -120,3 +120,28 @@ var setTimeout = function(f, delay) {
     thread.setDaemon(true);
     thread.start();
 };
+
+var forChainers = function(f) {
+    f(">>>", "<<<");
+    f("chain", "compose");
+};
+
+var forChainers2 = function(as, bs, f) {
+    return forEach2(as, bs, function(a, b) {
+        forChainers(function(chainName, composeName) {
+            f(a, b, chainName, composeName);
+        });
+    });
+};
+
+var forChainers2_ = de(forChainers2);
+
+var forChainers3 = function(as, bs, cs, f) {
+    return forEach3(as, bs, cs, function(a, b, c) {
+        forChainers(function(chainName, composeName) {
+            f(a, b, c, chainName, composeName);
+        });
+    });
+};
+
+var forChainers3_ = de(forChainers3);
