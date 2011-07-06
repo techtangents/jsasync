@@ -63,4 +63,5 @@ var testFailFail = forChainers2_(testValues, testValues, function(err, input, ch
     check(Bsync.constantFail(err)[chainName](Bsync.constantFail(err))[chainName](Bsync.sync(explode))[chainName](Bsync.failDentity));
 
     check(Bsync.sync(explode)[composeName](Bsync.constantFail(err)));
+    check(Bsync.sync(explode)[composeName](Bsync.constantFail(err))[composeName](Bsync.constant("aaaaaaaaaaaargh")));
 });
