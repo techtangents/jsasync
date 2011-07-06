@@ -3,7 +3,8 @@ require("../../../include/include.js");
 var sz = function(x) { return String(x); };
 
 var testPassPass = forChainers2_(testInts, testFunctionsFromInt, function(input, f1, chainName, composeName) {
-    var expectedArgs = [[sz(f1(input))]];
+    var expected = sz(f1(input));
+    var expectedArgs = [[expected]];
     var p1b = Bsync.sync(f1);
     var szb = Bsync.sync(sz);
 
@@ -31,6 +32,7 @@ var testPassPass = forChainers2_(testInts, testFunctionsFromInt, function(input,
     check(Bsync.chainMany([p1b, Bsync.identity, szb, Bsync.identity]));
     check(Bsync.chainMany([Bsync.identity, p1b, Bsync.identity, szb, Bsync.identity]));
     check(Bsync.chainMany([Bsync.identity, p1b, szb]));
+    check(Bsync.chainMany([Bsync.identity, p1b, szb, Bsync.constant(expected)]));
 });
 
 var testPassFail = forChainers3_(testValues, testValues, testFunctions, function(err, input, f, chainName, composeName) {
@@ -52,5 +54,8 @@ var testFailFail = forChainers2_(testValues, testValues, function(err, input, ch
         spy.verifyArgs(expectedArgs);
     }
     check(Bsync.constantFail(err)[chainName](Bsync.sync(explode)));
+    check(Bsync.constant(2)[chainName](Bsync.constantFail(err))[chainName](Bsync.sync(explode)));
+    check(Bsync.constantFail(err)[chainName](Bsync.constantFail(err))[chainName](Bsync.sync(explode))[chainName](Bsync.failDentity));
+
     check(Bsync.sync(explode)[composeName](Bsync.constantFail(err)));
 });
