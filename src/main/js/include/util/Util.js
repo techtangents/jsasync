@@ -113,19 +113,38 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
+    // TODO type sig
+    var arrayFoldLeft = function arrayFoldLeft(array, acc, initial) {
+        var cur = initial;
+        for (var i = 0; i < array.length; i++) {
+            cur = acc(cur, array[i]);
+        }
+        return cur;
+    };
+
+    var method = function(fnName) {
+        return function(x, y) {
+            return x[fnName](y);
+        };
+    };
+
     api.flip = flip;
     api.flipUncurried = flipUncurried;
     api.compose = compose;
     api.chain = chain;
     api.wrap = wrap;
     api.konst = konst;
+
     api.arrayMap = arrayMap;
     api.arrayEach = arrayEach;
     api.arrayFilter = arrayFilter;
+    api.arrayFoldLeft = arrayFoldLeft
+
     api.objectEach = objectEach;
     api.objectMap = objectMap;
     api.identity = identity;
     api.chainConst = chainConst;
     api.bounce = bounce;
     api.curry0 = curry0;
+    api.method = method;
 });

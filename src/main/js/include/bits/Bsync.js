@@ -179,27 +179,23 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             });
         };
 
-        // TODO: function that composes/chains an array of Bsyncs
-        var chainMany = function(as) {
-            // TODO: this is a reduce
-            // TODO: validate?
-            var r = identity;
-            Util.arrayEach(as, function(a) {
-                r = r[">>>"](a);
-            });
-            return r;
+        // TODO: type sig
+        var quain = function(fnName) {
+            return function(as) {
+                // TODO: validate input?
+                return Util.arrayFoldLeft(as, Util.method(fnName), identity);
+            };
         };
 
-        var composeMany = function(as) {
-            // TODO: this is a reduce
-            // TODO: validate?
-            // TODO: refactor against chainMany
-            var r = identity;
-            Util.arrayEach(as, function(a) {
-                r = r["<<<"](a);
-            });
-            return r;
-        };
+        /** chainMany [Bsyncs...]
+         *  Bsyncs = zero or more of the form: Bsync a b f, Bsync b c f, ..., Bsync y z f
+         */
+        var chainMany = quain(">>>");
+
+        /** composeMany [Bsyncs...]
+         *  Bsyncs = zero or more of the form: Bsync y z f, Bsync x y f, ..., Bsync a b f
+         */
+        var composeMany = quain("<<<");
 
         return {
             bsync: bsync,
