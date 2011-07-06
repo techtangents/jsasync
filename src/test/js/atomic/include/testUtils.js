@@ -145,3 +145,12 @@ var forChainers3 = function(as, bs, cs, f) {
 };
 
 var forChainers3_ = de(forChainers3);
+
+var repeat = function(a, count) {
+    var r = [];
+    for (var i = 0; i < count; i++) {
+        r.push(a);
+    }
+    return r;
+};
+

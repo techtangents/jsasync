@@ -65,3 +65,16 @@ var testFailFail = forChainers2_(testValues, testValues, function(err, input, ch
     check(Bsync.sync(explode)[composeName](Bsync.constantFail(err)));
     check(Bsync.sync(explode)[composeName](Bsync.constantFail(err))[composeName](Bsync.constant("aaaaaaaaaaaargh")));
 });
+
+var testComposeManyIdentity = forEach_(testValues, function(input) {
+    var check = function(q) {
+        var spy = jssert.spy();
+        q(input)(spy, explode);
+        spy.verifyArgs([[input]]);
+    };
+
+    for (var i = 0; i < 10; i++) {
+        check(Bsync.composeMany(repeat(Bsync.identity, i)));
+        check(Bsync.chainMany(repeat(Bsync.identity, i)));
+    }
+});
