@@ -43,6 +43,11 @@ var testPassFail = forChainers3_(testValues, testValues, testFunctions, function
         spy.verifyArgs(expectedArgs);
     }
     check(Bsync.sync(f)[chainName](Bsync.constantFail(err)));
+    check(Bsync.chainMany([Bsync.sync(f), Bsync.constantFail(err)]));
+
+    check(Bsync.identity[chainName](Bsync.sync(f))[chainName](Bsync.constantFail(err))[chainName](Bsync.sync(explode)));
+    check(Bsync.chainMany([Bsync.identity, Bsync.sync(f), Bsync.constantFail(err), Bsync.sync(explode)]));
+
     check(Bsync.constantFail(err)[composeName](Bsync.sync(f)));
 });
 
