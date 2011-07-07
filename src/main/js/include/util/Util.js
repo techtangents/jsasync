@@ -113,18 +113,31 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
-    // TODO type sig
-    var arrayFoldLeft = function arrayFoldLeft(array, acc, initial) {
-        var cur = initial;
-        for (var i = 0; i < array.length; i++) {
-            cur = acc(cur, array[i]);
+    /** arrayFoldLeft :: [a] -> (a -> b) -> b -> b */
+    var arrayFoldLeft = function(array) {
+        return function(acc) {
+            return function(initial) {
+                var cur = initial;
+                for (var i = 0; i < array.length; i++) {
+                    cur = acc(cur, array[i]);
+                }
+                return cur;
+            }
         }
-        return cur;
     };
 
     var method = function(fnName) {
         return function(x, y) {
             return x[fnName](y);
+        };
+    };
+
+    var arrayFoldLeftOnMethod = function(fnName) {
+        return function(initial) {
+            return function(as) {
+                // TODO: validate input?
+                return arrayFoldLeft(as)(Util.method(fnName))(initial);
+            };
         };
     };
 
@@ -138,7 +151,8 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.arrayMap = arrayMap;
     api.arrayEach = arrayEach;
     api.arrayFilter = arrayFilter;
-    api.arrayFoldLeft = arrayFoldLeft
+    api.arrayFoldLeft = arrayFoldLeft;
+    api.arrayFoldLeftOnMethod = arrayFoldLeftOnMethod;
 
     api.objectEach = objectEach;
     api.objectMap = objectMap;

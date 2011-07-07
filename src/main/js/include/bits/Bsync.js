@@ -179,18 +179,12 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             });
         };
 
-        /** quain :: String -> [Bsync sequence ? ? f] -> Bsync a z f */
-        var quain = function(fnName) {
-            return function(as) {
-                // TODO: validate input?
-                return Util.arrayFoldLeft(as, Util.method(fnName), identity);
-            };
-        };
+        var quain = Util.flip(Util.arrayFoldLeftOnMethod)(identity);
 
-        /** chainMany [zero or more of the form: Bsync a b f, Bsync b c f, ..., Bsync y z f] -> Bsync a z f */
+        /** chainMany :: [zero or more of the form: Bsync a b f, Bsync b c f, ..., Bsync y z f] -> Bsync a z f */
         var chainMany = quain(">>>");
 
-        /** composeMany [zero or more of the form: Bsync y z f, Bsync x y f, ..., Bsync a b f] -> Bsync a z f */
+        /** composeMany :: [zero or more of the form: Bsync y z f, Bsync x y f, ..., Bsync a b f] -> Bsync a z f */
         var composeMany = quain("<<<");
 
         return {
