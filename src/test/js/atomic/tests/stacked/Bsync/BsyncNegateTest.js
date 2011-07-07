@@ -1,12 +1,9 @@
 require("../../../include/include.js");
 
 var testFail = forEach_(testValues, function(input) {
-    var check = function(bs) {
-        var spy = jssert.spy();
-        bs(input)(explode, spy);
-        spy.verifyArgs([[input]]);
-    };
+    checkBfFail(Bsync.identity.negate()(input), input);
+    checkBfFail(Bsync.faildentity.negate().negate()(input), input);
 
-    check(Bsync.identity.negate());
-    check(Bsync.faildentity.negate().negate());
+    checkBfPass(Bsync.faildentity.negate()(input), input);
+    checkBfPass(Bsync.identity.negate().negate()(input), input);
 });

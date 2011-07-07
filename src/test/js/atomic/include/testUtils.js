@@ -154,3 +154,14 @@ var repeat = function(a, count) {
     return r;
 };
 
+var checkBfFail = function(bfuture, expected) {
+    var spy = jssert.spy();
+    bfuture(explode, spy);
+    spy.verifyArgs([[expected]]);
+};
+
+var checkBfPass = function(bfuture, expected) {
+    var spy = jssert.spy();
+    bfuture(spy, explode);
+    spy.verifyArgs([[expected]]);
+};
