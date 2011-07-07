@@ -94,22 +94,20 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 });
             };
 
-            /** alwaysPass :: this Bsync a b b -> Bsync a b f */
-            // TODO test
-            me.alwaysPass = function() {
-                return bsync(function(a, passCb, _) {
-                    me(a)(passCb, passCb);
-                });
+            var always = function(picker) {
+                return function() {
+                    return bsync(function(a, passCb, failCb) {
+                        var cb = picker(passCb, failCb);
+                        me(a)(cb, cb);
+                    });
+                };
             };
 
+            /** alwaysPass :: this Bsync a b b -> Bsync a b f */
+            me.alwaysPass = always(Bpicker.pass);
+
             /** alwaysFail :: this Bsync a b b -> Bsync a p b */
-            // TODO test
-            // TODO refactor against alwaysFail
-            me.alwaysFail = function() {
-                return bsync(function(a, _, failCb) {
-                    me(a)(failCb, failCb);
-                });
-            };
+            me.alwaysFail = always(Bpicker.fail);
 
             /** mapInAsync :: this Bsync b p f -> Async a b -> Bsync a p f */
             // TODO test
