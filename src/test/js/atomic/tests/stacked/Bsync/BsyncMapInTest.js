@@ -17,4 +17,7 @@ var test = forEach2_(testInts, testFunctionsFromInt, function(input, f) {
 
     // input -> identity -> identity -> input
     check(Bsync.sync(id).mapIn(id)(input), input);
+
+    // input -> f -> f -> f(f(input)
+    check(Bsync.sync(f).mapIn(f)(input), f(f(input)));
 });
