@@ -26,6 +26,12 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             };
         };
 
+        var bsync_ = function(f) {
+            return function() {
+                return bsync(f);
+            };
+        };
+
         /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f
          *  bsync(function(a, passCb, failCb){});
          */
@@ -62,6 +68,14 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 me(fab(a))(passCb, failCb);
             });
 
+            /** mapFail :: this Bsync a b f -> (f -> g) -> Bsync a b g */
+            me.mapFail = me["<!>"] = bs(function(mapper, a, passCb, failCb) {
+                me(a)(passCb, Util.compose(failCb)(mapper));
+            });
+
+            /** biMap :: this Bsync a b b -> (b -> c) -> Bsync a c c */
+            // TODO
+
             /** ap/<*> :: this Bsync a b f -> Bsync a (b -> c) f -> Bsync a c f
              *  Bsync * * f is an arrow, thus Bsync a * f is an applicative
              */
@@ -76,11 +90,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 });
             };
 
-            /** mapFail :: this Bsync a b f -> (f -> g) -> Bsync a b g */
-            me.mapFail = me["<!>"] = bs(function(mapper, a, passCb, failCb) {
-                me(a)(passCb, Util.compose(failCb)(mapper));
-            });
-
             /** negate :: this Bsync a b f -> Bsync a f b */
             // TODO test
             me.negate = function() {
@@ -90,12 +99,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             };
 
             var always = function(picker) {
-                return function() {
-                    return bsync(function(a, passCb, failCb) {
-                        var cb = picker(passCb, failCb);
-                        me(a)(cb, cb);
-                    });
-                };
+                return bsync_(function(a, passCb, failCb) {
+                    var cb = picker(passCb, failCb);
+                    me(a)(cb, cb);
+                });
             };
 
             /** alwaysPass :: this Bsync a b b -> Bsync a b f */
@@ -111,9 +118,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 });
             });
 
-            /** mapAsyncPass :: this Bsync a b f -> Async b c -> Bsync a c f */
+            /** mapAsync :: this Bsync a b f -> Async b c -> Bsync a c f */
             // TODO test
-            me.mapAsyncPass = function(abc) {
+            me.mapAsync = function(abc) {
                 return bsync(function(a, passCb, failCb) {
                     me(a)(function(b) {
                         abc(b)(passCb);
@@ -121,15 +128,19 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
                 });
             };
 
-            /** mapAsyncFail :: this Bsync a p f -> Async f g -> Bsync a p g */
+            /** mapFailAsync :: this Bsync a p f -> Async f g -> Bsync a p g */
             // TODO test
-            me.mapAsyncFail = function(afg) {
+            me.mapFailAsync = function(afg) {
                 return bsync(function(a, passCb, failCb) {
                     me(a)(passCb, function(f) {
                         afg(f)(failCb);
                     });
                 });
             };
+
+            /** biMapAsync :: this Bsync a b b -> Async b c -> Bsync a c c */
+            // TODO
+            
 
             /** amap :: this Bsync a p f -> [a] -> Bfuture [p] (Either p f) */
             me.amap = function(input) {
