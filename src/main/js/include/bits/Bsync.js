@@ -60,7 +60,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             /** mapIn :: this Bsync b c f -> (a -> b) -> Bsync a c f */
             // TODO alias
             // TODO test
-            // TODO refactor function(a) { return bsync(function(a, passCb, failCb) { ...}); });
+            // TODO is this Util.compose(me["<<<"])(sync) ?
             me.mapIn = me["<<^"] = bs(function(fab, a, passCb, failCb) {
                 me(fab(a))(passCb, failCb);
             });
@@ -80,11 +80,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             };
 
             /** mapFail :: this Bsync a b f -> (f -> g) -> Bsync a b g */
-            me.mapFail = me["<!>"] = function(mapper) {
-                return bsync(function(a, passCb, failCb) {
-                    me(a)(passCb, Util.compose(failCb)(mapper));
-                });
-            };
+            me.mapFail = me["<!>"] = bs(function(mapper, a, passCb, failCb) {
+                me(a)(passCb, Util.compose(failCb)(mapper));
+            });
 
             /** negate :: this Bsync a b f -> Bsync a f b */
             // TODO test
