@@ -105,7 +105,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             /** alwaysFail :: this Bsync a b b -> Bsync a p b */
             // TODO test
             // TODO refactor against alwaysFail
-            me.alwaysPass = function() {
+            me.alwaysFail = function() {
                 return bsync(function(a, _, failCb) {
                     me(a)(failCb, failCb);
                 });
