@@ -91,12 +91,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             };
 
             /** negate :: this Bsync a b f -> Bsync a f b */
-            // TODO test
-            me.negate = function() {
-                return bsync(function(a, passCb, failCb) {
-                    me(a)(failCb, passCb);
-                });
-            };
+            me.negate = bsync_(function(a, passCb, failCb) {
+                me(a)(failCb, passCb);
+            });
 
             var always = function(picker) {
                 return bsync_(function(a, passCb, failCb) {
