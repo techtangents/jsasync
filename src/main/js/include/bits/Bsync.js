@@ -18,6 +18,14 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         var Async   = techtangents.jsasync.bits.Async.create(executor);
         var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor);
 
+        var bs = function(f) {
+            return function(x) {
+                return bsync(function(a, passCb, failCb){
+                    f(x, a, passCb, failCb);
+                });
+            };
+        };
+
         /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f
          *  bsync(function(a, passCb, failCb){});
          */
@@ -30,13 +38,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
             /** compose :: Bsync b c f -> Bsync a b f -> Bsync a c f */
             var compose = function(bcf) {
-                return function(abf) {
-                    return Bsync.bsync(function(a, passCb, failCb) {
-                        abf(a)(function(b) {
-                            bcf(b)(passCb, failCb);
-                        }, failCb);
-                    });
-                };
+                return bs(function(abf, a, passCb, failCb) {
+                    abf(a)(function(b) {
+                        bcf(b)(passCb, failCb);
+                    }, failCb);
+                });
             };
 
             /** chain :: Bsync a b f -> Bsync b c f -> Bsync a c f */
@@ -55,11 +61,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             // TODO alias
             // TODO test
             // TODO refactor function(a) { return bsync(function(a, passCb, failCb) { ...}); });
-            me.mapIn = me["<<^"] = function(fab) {
-                return bsync(function(a, passCb, failCb) {
-                    me(fab(a))(passCb, failCb);
-                });
-            };
+            me.mapIn = me["<<^"] = bs(function(fab, a, passCb, failCb) {
+                me(fab(a))(passCb, failCb);
+            });
 
             /** ap/<*> :: this Bsync a b f -> Bsync a (b -> c) f -> Bsync a c f
              *  Bsync * * f is an arrow, thus Bsync a * f is an applicative
