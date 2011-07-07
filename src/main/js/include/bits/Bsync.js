@@ -105,14 +105,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             me.alwaysFail = always(Bpicker.fail);
 
             /** mapInAsync :: this Bsync b p f -> Async a b -> Bsync a p f */
-            // TODO test
-            me.mapInAsync = function(aab) {
-                return bsync(function(a, passCb, failCb) {
-                    aab(a)(function(b) {
-                        me(b)(passCb, failCb);
-                    });
+            me.mapInAsync = bs(function(aab, a, passCb, failCb) {
+                aab(a)(function(b) {
+                    me(b)(passCb, failCb);
                 });
-            };
+            });
 
             /** mapAsyncPass :: this Bsync a b f -> Async b c -> Bsync a c f */
             // TODO test
