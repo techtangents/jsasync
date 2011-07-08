@@ -165,3 +165,9 @@ var checkBfPass = function(bfuture, expected) {
     bfuture(spy, explode);
     spy.verifyArgs([[expected]]);
 };
+
+var checkF = function(future, expected) {
+    var spy = jssert.spy();
+    future(spy);
+    spy.verifyArgs([[expected]]);
+};

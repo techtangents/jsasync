@@ -1,8 +1,7 @@
 require("../../../include/include.js");
 
-var testBind = forEachWithSpy_(testInts, function(x, spy) {
-    plus1(x) [">>="] (sz) [">>="] (suffixQ)(spy);
-    spy.verifyArgs([[String(x + 1) + "q"]]);
+var testBind = forEach2_(testInts, [">>=", "bind"], function(x, fnName) {
+    checkF(plus1(x)[fnName](sz)[fnName](suffixQ), String(x + 1) + "q");
 });
 
 var testAnonBind = permute2_(testValues, function(x, y) {
@@ -21,13 +20,10 @@ var testAnonBind = permute2_(testValues, function(x, y) {
     spy2.verifyArgs([[y]]);
 });
 
-var testMap = forEachWithSpy_(testInts, function(v, spy) {
-    Future.constant(v) ["<$>"] (function(x) { return x + 2; })(spy);
-    spy.verifyArgs([[v + 2]]);
+var testMap = forEach2_(testInts, ["<$>", "map"], function(v, fnName) {
+    checkF(Future.constant(v)[fnName](function(x) { return x + 2; }), v + 2);
 });
 
-var testConstant = forEachWithSpy_(testInts, function(x, spy) {
-    Future.constant(x)(spy);
-    spy.verifyArgs([[x]]);
+var testConstant = forEach_(testInts, function(x) {
+    checkF(Future.constant(x), x);
 });
-
