@@ -6,8 +6,12 @@ var testMapFailOnFail = forEach3_(testFunctionsFromInt, testInts, testValues, fu
     fnNames.forEach(function(fnName) {
         checkBfFail(Bsync.constantFail(input)[fnName](f)(dummy), f(input));
     });
+    checkBfFail(Bsync.constantFail(input).mapFailAsync(Async.sync(f))(dummy), f(input));
 });
 
-var testMapFailOnPass = forEach3_(testInts, testValues, fnNames, function(input, dummy, fnName) {
-    checkBfPass(Bsync.constant(input)[fnName](explode)(dummy), input);
+var testMapFailOnPass = forEach2_(testInts, testValues, function(input, dummy) {
+    fnNames.forEach(function(fnName) {
+        checkBfPass(Bsync.constant(input)[fnName](explode)(dummy), input);
+    });
+    checkBfPass(Bsync.constant(input).mapFailAsync(Async.sync(explode))(dummy), input);
 });

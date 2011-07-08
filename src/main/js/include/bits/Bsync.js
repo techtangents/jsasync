@@ -123,14 +123,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             });
 
             /** mapFailAsync :: this Bsync a p f -> Async f g -> Bsync a p g */
-            // TODO test
-            me.mapFailAsync = function(afg) {
-                return bsync(function(a, passCb, failCb) {
-                    me(a)(passCb, function(f) {
-                        afg(f)(failCb);
-                    });
+            me.mapFailAsync = bs(function(afg, a, passCb, failCb) {
+                me(a)(passCb, function(f) {
+                    afg(f)(failCb);
                 });
-            };
+            });
 
             /** biMapAsync :: this Bsync a b b -> Async b c -> Bsync a c c */
             // TODO
