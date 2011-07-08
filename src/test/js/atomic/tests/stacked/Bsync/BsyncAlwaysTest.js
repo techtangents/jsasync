@@ -2,9 +2,7 @@ require("../../../include/include.js");
 
 var testPass = forEach_(testValues, function(input) {
     var check = function(bs) {
-        var spy = jssert.spy();
-        bs(input)(spy, explode);
-        spy.verifyArgs([[input]]);
+        checkBfPass(bs(input), input);
     };
 
     check(Bsync.identity.alwaysPass());
@@ -17,9 +15,7 @@ var testPass = forEach_(testValues, function(input) {
 
 var testFail = forEach_(testValues, function(input) {
     var check = function(bs) {
-        var spy = jssert.spy();
-        bs(input)(explode, spy);
-        spy.verifyArgs([[input]]);
+        checkBfFail(bs(input), input);
     };
 
     check(Bsync.identity.alwaysFail());
