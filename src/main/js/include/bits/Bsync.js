@@ -175,11 +175,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         var constantFail = Util.chainConst(syncFail);
 
         /** predicate :: (a -> Bool) -> Bsync a a a */
-        var predicate = function(pred) {
-            return Bsync.bsync(function(a, passCb, failCb) {
-                (pred(a) ? passCb : failCb)(a);
-            });
-        };
+        var predicate = bs(function(pred, a, passCb, failCb) {
+            (pred(a) ? passCb : failCb)(a);
+        });
 
         var quain = Util.flip(Util.arrayFoldLeftOnMethod)(identity);
 
