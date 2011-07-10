@@ -1,7 +1,5 @@
 require("../../../include/include.js");
 
-var sz = function(x) { return String(x); };
-
 var testPassPass = forChainers2_(testInts, testFunctionsFromInt, function(input, f1, chainName, composeName) {
     var expected = sz(f1(input));
     var expectedArgs = [[expected]];

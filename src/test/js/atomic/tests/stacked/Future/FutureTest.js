@@ -19,7 +19,7 @@ var test = unitTest(function(Future, Async, Bfuture, Bsync) {
     });
 
     forEach2(testInts, [">>=", "bind"], function(x, fnName) {
-        checkF(plus1(x)[fnName](sz)[fnName](suffixQ), String(x + 1) + "q");
+        checkF(Async.sync(plus1)(x)[fnName](Async.sync(sz))[fnName](Async.sync(suffixQ)), String(x + 1) + "q");
     });
 
     forEach2(testInts, ["<$>", "map"], function(v, fnName) {

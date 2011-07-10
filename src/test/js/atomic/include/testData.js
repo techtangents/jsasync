@@ -1,16 +1,9 @@
-var sz = Async.async(function(a, callback) {
-    callback(String(a));
-});
-
-var plus1 = Async.async(function(a, callback) {
-    callback(a + 1);
-});
-
-var gte2 = function(a) { return a >= 2; };
-
-var suffixQ = Async.async(function(a, callback) {
-    callback(a + "q")
-});
+var sz      = function(a) { return String(a); };
+var plus1   = function(a) { return a + 1;     };
+var plus2   = function(a) { return a + 2;     };
+var gte2    = function(a) { return a >= 2;    };
+var suffixQ = function(a) { return a + "q";   };
+var toNum   = function(a) { return Number(a); };
 
 var arrayUnital = function(x) { return [x]; }
 
