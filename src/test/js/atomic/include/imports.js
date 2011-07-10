@@ -1,5 +1,10 @@
+// FIX: dupe
+
 jssert.assertEq(undefined, this.stacked);
 var stacked = techtangents.jsasync.api.stacked;
+
+jssert.assertEq(undefined, this.bounced);
+var bounced = techtangents.jsasync.api.bounced;
 
 jssert.assertEq(undefined, this.Async);
 var Async = stacked.Async;

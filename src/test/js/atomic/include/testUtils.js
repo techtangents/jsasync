@@ -99,7 +99,7 @@ importClass(java.lang.Runnable);
 var waitFor = function(condition) {
     var elapsed = 0;
     var delta = 10;
-    while(!condition() || elapsed < 6000) {
+    while(!condition() && elapsed < 6000) {
         Thread.sleep(delta);
         elapsed += delta;
     }
@@ -166,8 +166,26 @@ var checkBfPass = function(bfuture, expected) {
     spy.verifyArgs([[expected]]);
 };
 
+var waitForSpy = function(spy) {
+    waitFor(function() {
+        return spy.getInvocationArgs().length >= 1;
+    });
+};
+
+var waitForSpies = function(spies) {
+    spies.forEach(waitForSpy);
+};
+
 var checkF = function(future, expected) {
     var spy = jssert.spy();
     future(spy);
+    waitForSpy(spy);
     spy.verifyArgs([[expected]]);
+};
+
+var unitTest = function(f) {
+    return function() {
+        f(stacked.Future, stacked.Async, stacked.Bfuture, stacked.Bsync);
+        f(bounced.Future, bounced.Async, bounced.Bfuture, bounced.Bsync);
+    };
 };
