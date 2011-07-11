@@ -1,7 +1,5 @@
 require("../../include/include.js");
 
-var bounceyFuture = techtangents.jsasync.api.bounced.Future;
-
 function test() {
 
     [0, 1, 2, 10].forEach(function(num){
@@ -10,7 +8,7 @@ function test() {
 
         var mk = function(i) {
             // 'sync' is a rhino function that gives you some java synchronization
-            return bounceyFuture.future(sync(function(cb) {
+            return bounced.Future.future(sync(function(cb) {
                 cb(i);
             }));
         };
@@ -21,7 +19,7 @@ function test() {
         }
 
         var actual;
-        bounceyFuture.par(fs)(function(as) {
+        bounced.Future.par(fs)(function(as) {
             actual = as;
         });
 

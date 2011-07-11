@@ -1,6 +1,6 @@
 Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, _private) {
 
-    var create = function(executor) {
+    var create = function(executor, synchronizer) {
 
         /** data Bfuture p f :: Bifuture { apply :: (p -> (), f -> ()) -> () };
          *  A Bfuture represents the result of an asynchronous computation which may pass or fail

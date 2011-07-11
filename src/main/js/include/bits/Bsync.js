@@ -1,6 +1,6 @@
 Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
-    var create = function(executor) {
+    var create = function(executor, synchronizer) {
 
         /** A Bsync represents an asynchronous computation which may "succeed" or "fail".
          *  Applying an argument to a Bsync generates a Bfuture.
@@ -15,8 +15,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         var Either  = techtangents.jsasync.util.Either;
         var Bpicker = techtangents.jsasync.util.Bpicker;
 
-        var Async   = techtangents.jsasync.bits.Async.create(executor);
-        var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor);
+        var Async   = techtangents.jsasync.bits.Async.create(executor, synchronizer);
+        var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor, synchronizer);
 
         var bs = function(f) {
             return function(x) {

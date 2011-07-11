@@ -1,10 +1,10 @@
 // FIX: dupe
 
 jssert.assertEq(undefined, this.stacked);
-var stacked = techtangents.jsasync.api.stacked;
+var stacked = techtangents.jsasync.api.rhino.stacked;
 
 jssert.assertEq(undefined, this.bounced);
-var bounced = techtangents.jsasync.api.bounced;
+var bounced = techtangents.jsasync.api.rhino.bounced;
 
 jssert.assertEq(undefined, this.Async);
 var Async = stacked.Async;

@@ -1,6 +1,6 @@
 Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
 
-    var create = function(executor) {
+    var create = function(executor, synchronizer) {
 
         /** data Future = Future { apply :: (b -> ()) -> () }
          *  A Future represents the future result of an asnchronous computation.
@@ -60,7 +60,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
         var par = function(futures) {
             return future(function(callback) {
                 var r = [];
-                var tick = Ticker.create(futures.length, Util.curry0(callback)(r));
+                var tick = Ticker.create(synchronizer, futures.length, Util.curry0(callback)(r));
                 Util.arrayEach(futures, function(fut, i) {
                     fut(function(value) {
                         r[i] = value;

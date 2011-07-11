@@ -97,17 +97,29 @@ importClass(java.lang.Thread);
 importClass(java.lang.Runnable);
 
 var waitFor = function(condition) {
+    var quandition = sync(condition);
+
     var elapsed = 0;
-    var delta = 10;
-    while(!condition() && elapsed < 6000) {
+    var timedOut = function() {
+        // With Ent's multi-threaded js test runner, and multi-threaded amap tests, we need a large timeout.
+        // timeout should only occur with bugs
+        return elapsed > 120000;
+    };
+
+    var delta = 1;
+    while(!quandition() && !timedOut()) {
         Thread.sleep(delta);
         elapsed += delta;
+        delta *= 1.5; // back-off, so we don't get in the way of the actual work
     }
-    jssert.assertEq(true, condition());
+
+    if (!quandition()) {
+        fail("condition not met before timeout");
+    }
 };
 
 var randomSleep = function() {
-    Thread.sleep(Math.random() * 15);
+    Thread.sleep(Math.random() * 8);
 };
 
 var setTimeout = function(f, delay) {
@@ -176,8 +188,28 @@ var waitForSpies = function(spies) {
     spies.forEach(waitForSpy);
 };
 
+var syncSpy = function() {
+    var jspy = jssert.spy();
+    var q = sync(function() {
+        return jspy.apply(this, arguments);
+    });
+
+    var f = function() {
+        return q.apply(this, arguments);
+    };
+
+    f.getInvocationArgs = sync(function() {
+        return jspy.getInvocationArgs.apply(this, arguments);
+    });
+    f.verifyArgs = sync(function() {
+        return jspy.verifyArgs.apply(this, arguments);
+    });
+
+    return f;
+};
+
 var checkF = function(future, expected) {
-    var spy = jssert.spy();
+    var spy = syncSpy();
     future(spy);
     waitForSpy(spy);
     spy.verifyArgs([[expected]]);

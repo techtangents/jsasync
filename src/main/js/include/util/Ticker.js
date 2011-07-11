@@ -1,5 +1,5 @@
 Ephox.core.module.define("techtangents.jsasync.util.Ticker", [], function(api) {
-    api.create = function(num, done) {
+    api.create = function(synchronizer, num, done) {
         var count = 0;
         function check() {
             if (count == num) {
@@ -7,9 +7,9 @@ Ephox.core.module.define("techtangents.jsasync.util.Ticker", [], function(api) {
             }
         }
         check();
-        return function() {
+        return synchronizer(function() {
             count++;
             check();
-        };
+        });
     };
 });
