@@ -9,6 +9,14 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
         var Util   = techtangents.jsasync.util.Util;
         var Future = techtangents.jsasync.bits.Future.create(executor, synchronizer);
 
+        var ak = function(f) {
+            return function(x) {
+                return async(function(a, callback) {
+                    f(x, a, callback);
+                });
+            };
+        };
+
         /** async :: (a -> (b -> ()) -> a -> Async a b
          *  Creates an Async from an asynchronous function(a, callback)
          */
@@ -20,27 +28,21 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             };
 
             /** mapIn/<<^ :: this Async b c -> (a -> b) -> Async a c */
-            me.mapIn = me["<<^"] = function(mapper) {
-                return Async.async(function(b, callback) {
-                    me(mapper(b))(callback);
-                });
-            };
+            me.mapIn = me["<<^"] = ak(function(mapper, b, callback) {
+                me(mapper(b))(callback);
+            });
 
             /** map/>>^/<$> :: this Async a b -> (b -> c) -> Async a c */
-            me.map = me[">>^"] = me["<$>"] = function(mapper) {
-                return Async.async(function(a, callback) {
-                    me(a)(Util.compose(callback)(mapper));
-                });
-            };
+            me.map = me[">>^"] = me["<$>"] = ak(function(mapper, a, callback) {
+                me(a)(Util.compose(callback)(mapper));
+            });
 
             /** ap/<*> Async a b -> Async a (b -> c) -> Async a c */
-            me.ap = me["<*>"] = function(abc) {
-                return Async.async(function(a, callback) {
-                    me(a)(function(b) {
-                        abc(a)(Util.compizzle(callback)(b));
-                    });
+            me.ap = me["<*>"] = ak(function(abc, a, callback) {
+                me(a)(function(b) {
+                    abc(a)(Util.compizzle(callback)(b));
                 });
-            };
+            });
 
             // TODO functions to convert to pass/fail Bsyncs
 
@@ -48,11 +50,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
 
             /** compose :: Async b c -> Async a b -> Async a c */
             var compose = function(bc) {
-                return function(ab) {
-                    return Async.async(function(a, callback) {
-                        ab(a)(Util.flip(bc)(callback));
-                    });
-                };
+                return ak(function(ab, a, callback) {
+                    ab(a)(Util.flip(bc)(callback));
+                });
             };
 
             /** chain :: Async a b -> Async b c -> Async a c */
@@ -78,11 +78,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
         };
 
         /** sync :: (a -> b) -> Async a b */
-        var sync = function(f) {
-            return async(function(a, callback) {
-                callback(f(a));
-            });
-        };
+        var sync = ak(function(f, a, callback) {
+            callback(f(a));
+        });
 
         /** constant :: b -> Async a b */
         var constant = Util.compose(sync)(Util.konst);
