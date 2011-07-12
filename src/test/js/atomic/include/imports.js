@@ -6,6 +6,9 @@ var stacked = techtangents.jsasync.api.rhino.stacked;
 jssert.assertEq(undefined, this.bounced);
 var bounced = techtangents.jsasync.api.rhino.bounced;
 
+jssert.assertEq(undefined, this.auto);
+var auto = techtangents.jsasync.api.auto;
+
 jssert.assertEq(undefined, this.Async);
 var Async = stacked.Async;
 

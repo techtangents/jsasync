@@ -2,20 +2,16 @@ Ephox.core.module.define("techtangents.jsasync.api", [], function(api) {
 
     var Library         = techtangents.jsasync.glue.Library;
     var Util            = techtangents.jsasync.util.Util;
-    var Synchronization = techtangents.jsasync.util.Synchronization
+    var Synchronization = techtangents.jsasync.util.Synchronization;
+    var Detective       = techtangents.jsasync.util.Detective;
 
-    var mk = function(syncer) {
-        return {
-            /** Chained calls are invoked via normal call stack. */
-            stacked: Library.create(Util.wrap, syncer),
+    var browser = Library.create(Synchronization.noSync);
+    var rhino = Library.create(Synchronization.rhinoSync);
 
-            /** Uses short setTimeouts between calls. */
-            bounced: Library.create(Util.bounce, syncer)
-        };
-    };
+    var platform = Detective.detect();
+    var auto = platform === "rhino" ? rhino.stacked : platform === "browser" ? browser.bounced : browser.stacked;
 
-    api.browser = mk(Synchronization.noSync);
-    api.rhino = mk(Synchronization.rhinoSync);
-
-    api.auto = undefined; // TODO: detect Rhino. if rhino: rhino.stacked, if browser: browser.bounced. Other: browser.stacked.
+    api.browser = browser;
+    api.rhino   = rhino;
+    api.auto    = auto;
 });

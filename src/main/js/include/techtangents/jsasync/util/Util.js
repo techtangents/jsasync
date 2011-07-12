@@ -141,6 +141,22 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
+    var hasAllProperties = function(o, props) {
+        for (var i = 0; i < props.length; i++) {
+            if (!o.hasOwnProperty(props[i])) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    var global = function() {
+        return (function() { return this; })();
+    };
+
+    api.global = global;
+    api.hasAllProperties = hasAllProperties;
+
     api.flip = flip;
     api.flipUncurried = flipUncurried;
     api.compose = compose;

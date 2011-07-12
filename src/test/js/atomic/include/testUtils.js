@@ -219,5 +219,6 @@ var unitTest = function(f) {
     return function() {
         f(stacked.Future, stacked.Async, stacked.Bfuture, stacked.Bsync);
         f(bounced.Future, bounced.Async, bounced.Bfuture, bounced.Bsync);
+        f(auto.Future,    auto.Async,    auto.Bfuture,    auto.Bsync);
     };
 };
