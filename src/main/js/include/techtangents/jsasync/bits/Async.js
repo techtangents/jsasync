@@ -6,8 +6,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
          *  An Async represents an asynchronous computation. It is an augmented function and forms an arrow.
          */
 
-        var Util   = techtangents.jsasync.util.Util;
-        var Future = techtangents.jsasync.bits.Future.create(executor, synchronizer);
+        var Util    = techtangents.jsasync.util.Util;
+        var Bpicker = techtangents.jsasync.util.Bpicker;
+
+        var Future  = techtangents.jsasync.bits.Future.create(executor, synchronizer);
 
         var ak = function(f) {
             return function(x) {
@@ -44,22 +46,21 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
                 });
             });
 
-            // TODO test
-            me.toPassBsync = function() {
-                return Bsync.bsync(function(a, passCb, _) {
-                    me(a)(passCb);
-                });
+            var toBsync = function(picker) {
+                // bind late to avoid infinite recursion
+                var Bsync = techtangents.jsasync.bits.Bsync.create(executor, synchronizer);
+                return function() {
+                    return Bsync.bsync(function(a, passCb, failCb) {
+                        me(a)(picker(passCb, failCb));
+                    });
+                };
             };
 
-            // TODO test
-            // TODO refactor against his friend
-            me.toFailBsync = function() {
-                return Bsync.bsync(function(a, _, failCb) {
-                    me(a)(failCb);
-                });
-            };
+            /** toPassBsync :: this Async a p -> Bsync a p f */
+            me.toPassBsync = toBsync(Bpicker.pass);
 
-            // TODO compose and chain could do with a few more tests
+            /** toFailBsync :: this Async a f -> Bsync a p f */
+            me.toFailBsync = toBsync(Bpicker.fail);
 
             /** compose :: Async b c -> Async a b -> Async a c */
             var compose = function(bc) {
