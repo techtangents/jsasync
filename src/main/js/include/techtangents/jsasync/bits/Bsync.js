@@ -79,7 +79,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             /** ap/<*> :: this Bsync a b f -> Bsync a (b -> c) f -> Bsync a c f
              *  Bsync * * f is an arrow, thus Bsync a * f is an applicative
              */
-            // TODO test
             me.ap = me["<*>"] = function(abc) {
                 return bsync(function(a, passCb, failCb) {
                     me(a)(function(b) {
