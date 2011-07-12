@@ -84,6 +84,22 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
+    /** flips arguments 2 and 3 of a 3 arg curried function
+     *  flip23 :: (a -> b -> c -> d) -> a -> c -> b -> d
+     */
+    var flip23 = function(f) {
+        return function(a) {
+            return function(c) {
+                return function(b) {
+                    return f(a)(b)(c);
+                };
+            };
+        };
+    };
+
+    /** compizzle :: (b -> c) -> a -> (b -> c) -> a -> c */
+    var compizzle = flip23(compose);
+
     /** chain :: (a -> b) -> (b -> c) -> a -> c */
     var chain = flip(compose);
 
@@ -160,6 +176,7 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.flip = flip;
     api.flipUncurried = flipUncurried;
     api.compose = compose;
+    api.compizzle = compizzle;
     api.chain = chain;
     api.wrap = wrap;
     api.konst = konst;

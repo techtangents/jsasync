@@ -37,9 +37,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             me.ap = me["<*>"] = function(abc) {
                 return Async.async(function(a, callback) {
                     me(a)(function(b) {
-                        abc(a)(function(bc) {
-                            callback(bc(b));
-                        });
+                        abc(a)(Util.compizzle(callback)(b));
                     });
                 });
             };
