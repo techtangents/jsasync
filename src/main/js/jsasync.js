@@ -4,6 +4,7 @@ Ephox.core.include.require("jsasync", [
     "include/techtangents/jsasync/util/Ticker.js",
     "include/techtangents/jsasync/util/Either.js",
     "include/techtangents/jsasync/util/Bpicker.js",
+    "include/techtangents/jsasync/util/Synchronization.js",
 
     "include/techtangents/jsasync/bits/Future.js",
     "include/techtangents/jsasync/bits/Async.js",
