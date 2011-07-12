@@ -1,18 +1,13 @@
 require("../../../include/include.js");
 
-var testBindPassPass = forEach2WithSpy_(testFunctionsFromInt, testInts, function(f, input, spy) {
-    Bfuture.constant(input).bind(Bsync.sync(f))(spy, explode);
-    var expected = f(input);
-    spy.verifyArgs([[expected]]);
-});
+var test = unitTest(function(Future, Async, Bfuture, Bsync) {
 
-var testBindFail = forEach2WithSpy_(["bind", ">>="], testInts, function(fnName, input, spy) {
-    Bfuture.constantFail(input)[fnName](undefined)(explode, spy);
-    spy.verifyArgs([[input]]);
-});
+    forEach2(["bind", ">>="], testInts, function(fnName, input) {
+        forEach(testFunctionsFromInt, function(f) {
+            checkBfPass(Bfuture.constant(input)[fnName](Bsync.sync(f)), f(input));
+        });
 
-var testBindPassFail = forEach2WithSpy_(["bind", ">>="], testInts, function(fnName, input, spy) {
-    Bfuture.constant(input)[fnName](Bsync.constantFail("no dice"))(explode, spy);
-    spy.verifyArgs([["no dice"]]);
+        checkBfFail(Bfuture.constantFail(input)[fnName](undefined), input);
+        checkBfFail(Bfuture.constant(input)[fnName](Bsync.constantFail("no dice")), "no dice");
+    });
 });
-

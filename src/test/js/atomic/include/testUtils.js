@@ -166,18 +166,6 @@ var repeat = function(a, count) {
     return r;
 };
 
-var checkBfFail = function(bfuture, expected) {
-    var spy = jssert.spy();
-    bfuture(explode, spy);
-    spy.verifyArgs([[expected]]);
-};
-
-var checkBfPass = function(bfuture, expected) {
-    var spy = jssert.spy();
-    bfuture(spy, explode);
-    spy.verifyArgs([[expected]]);
-};
-
 var waitForSpy = function(spy) {
     waitFor(function() {
         return spy.getInvocationArgs().length >= 1;
@@ -186,6 +174,48 @@ var waitForSpy = function(spy) {
 
 var waitForSpies = function(spies) {
     spies.forEach(waitForSpy);
+};
+
+function waitForSpyOrBomb(spy, bomb) {
+    waitFor(function() {
+        return spy.getInvocationArgs().length === 1 || bomb.hasBeenCalled();
+    });
+};
+
+function makeBomb() {
+    var called = false;
+    var f = function() {
+        called = true;
+        explode();
+    };
+
+    f.hasBeenCalled = function() {
+        return called;
+    };
+
+    f.maybeExplode = function() {
+        if (called) explode();
+    };
+
+    return f;
+};
+
+var checkBfFail = function(bfuture, expected) {
+    var spy = jssert.spy();
+    var bomb = makeBomb();
+    bfuture(bomb, spy);
+    waitForSpyOrBomb(spy, bomb);
+    bomb.maybeExplode();
+    spy.verifyArgs([[expected]]);
+};
+
+var checkBfPass = function(bfuture, expected) {
+    var spy = jssert.spy();
+    var bomb = makeBomb();
+    bfuture(spy, bomb);
+    waitForSpyOrBomb(spy, bomb);
+    bomb.maybeExplode();
+    spy.verifyArgs([[expected]]);
 };
 
 var syncSpy = function() {
