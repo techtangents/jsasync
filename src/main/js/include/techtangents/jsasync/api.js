@@ -1,7 +1,7 @@
 Ephox.core.module.define("techtangents.jsasync.api", [], function(api) {
 
-    var Library = techtangents.jsasync.glue.Library;
-    var Util = techtangents.jsasync.util.Util;
+    var Library         = techtangents.jsasync.glue.Library;
+    var Util            = techtangents.jsasync.util.Util;
     var Synchronization = techtangents.jsasync.util.Synchronization
 
     var mk = function(syncer) {

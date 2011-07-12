@@ -1,6 +1,6 @@
 Ephox.core.module.define("techtangents.jsasync.util.Synchronization", [], function(api, _private) {
 
-    var noSync = function(lockObj, fn) {
+    var noSync = function(_, fn) {
         return Util.wrap(fn);
     };
 
