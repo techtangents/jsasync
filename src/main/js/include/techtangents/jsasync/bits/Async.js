@@ -44,7 +44,20 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
                 });
             });
 
-            // TODO functions to convert to pass/fail Bsyncs
+            // TODO test
+            me.toPassBsync = function() {
+                return Bsync.bsync(function(a, passCb, _) {
+                    me(a)(passCb);
+                });
+            };
+
+            // TODO test
+            // TODO refactor against his friend
+            me.toFailBsync = function() {
+                return Bsync.bsync(function(a, _, failCb) {
+                    me(a)(failCb);
+                });
+            };
 
             // TODO compose and chain could do with a few more tests
 
