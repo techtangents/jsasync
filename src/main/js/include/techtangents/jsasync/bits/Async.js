@@ -34,7 +34,15 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             };
 
             /** ap/<*> Async a b -> Async a (b -> c) -> Async a c */
-            // TODO
+            me.ap = me["<*>"] = function(abc) {
+                return Async.async(function(a, callback) {
+                    me(a)(function(b) {
+                        abc(a)(function(bc) {
+                            callback(bc(b));
+                        });
+                    });
+                });
+            };
 
             // TODO functions to convert to pass/fail Bsyncs
 
