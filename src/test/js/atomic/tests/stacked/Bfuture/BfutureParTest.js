@@ -1,9 +1,9 @@
 require("../../../include/include.js");
 
-var testParConstants = forEachWithSpy_(testArrays, function(input, spy) {
-    var futures = input.map(Bfuture.constant);
-    Bfuture.par(futures)(spy, explode);
-    spy.verifyArgs([[input]]);
+var testParConstants = unitTest(function(Future, Async, Bfuture, Bsync) {
+    forEach(testArrays, function(input) {
+        checkBfPass(Bfuture.par(input.map(Bfuture.constant)), input);
+    });
 });
 
 var testParConstantFails = forEachWithSpy_(testNonEmptyArrays, function(input, spy) {
