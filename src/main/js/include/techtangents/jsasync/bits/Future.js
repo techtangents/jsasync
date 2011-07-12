@@ -61,11 +61,12 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
             return future(function(callback) {
                 var r = [];
                 var tick = Ticker.create(synchronizer, futures.length, Util.curry0(callback)(r));
+                var lock = {};
                 Util.arrayEach(futures, function(fut, i) {
-                    fut(function(value) {
+                    fut(synchronizer(lock, function(value) {
                         r[i] = value;
                         tick();
-                    });
+                    }));
                 });
             });
         };

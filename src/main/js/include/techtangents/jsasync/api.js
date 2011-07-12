@@ -8,11 +8,16 @@ Ephox.core.module.define("techtangents.jsasync.api", [], function(api) {
 
     // TODO sideways
 
-    var rhinoSync = function(f) {
-        return Util.wrap(sync(f));
+    var rhinoSync = function(lockObj, f) {
+        var sf = sync(f);
+        return function() {
+            return sf.apply(lockObj, arguments);
+        };
     };
 
-    var noSync = Util.wrap;
+    var noSync = function(lockObj, fn) {
+        return Util.wrap(fn);
+    };
 
     api.browser = {
         /** Chained calls are invoked via normal call stack. */
