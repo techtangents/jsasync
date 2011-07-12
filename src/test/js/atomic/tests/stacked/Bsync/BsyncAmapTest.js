@@ -1,8 +1,9 @@
 require("../../../include/include.js");
 
-var testPass = forEach2WithSpy_(testFunctions, testArrays, function(f, inputs, spy) {
-    var expected = inputs.map(f);
-    checkBfPass(Bsync.sync(f).amap(inputs), expected);
+var test = unitTest(function(Future, Async, Bfuture, Bsync) {
+    forEach2WithSpy(testFunctions, testArrays, function(f, inputs, spy) {
+        checkBfPass(Bsync.sync(f).amap(inputs), inputs.map(f));
+    });
 });
 
 var testFail = forEachWithSpy_(testValues, function(inputs_, spy) {
