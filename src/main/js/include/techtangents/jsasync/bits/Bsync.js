@@ -15,7 +15,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
         var Either  = techtangents.jsasync.util.Either;
         var Bpicker = techtangents.jsasync.util.Bpicker;
 
-        var Async   = techtangents.jsasync.bits.Async.create(executor, synchronizer);
         var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor, synchronizer);
 
         var bs = function(f) {

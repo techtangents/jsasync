@@ -92,19 +92,33 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
         };
 
         /** sync :: (a -> b) -> Async a b */
-        var sync = ak(function(f, a, callback) {
-            callback(f(a));
-        });
+        var sync = function(f) {
+            return async(function(a, callback) {
+                callback(f(a));
+            });
+        };
+
+        /** identity :: Async a a */
+        var identity = sync(Util.identity);
 
         /** constant :: b -> Async a b */
         var constant = Util.compose(sync)(Util.konst);
 
-        // TODO function to compose/chain an array of Asyncs
+        var quain = Util.flip(Util.arrayFoldLeftOnMethod)(identity);
+
+        /** chainMany :: [zero or more of the form: Bsync a b f, Bsync b c f, ..., Bsync y z f] -> Bsync a z f */
+        var chainMany = quain(">>>");
+
+        /** composeMany :: [zero or more of the form: Bsync y z f, Bsync x y f, ..., Bsync a b f] -> Bsync a z f */
+        var composeMany = quain("<<<");
 
         return {
             async: async,
             sync: sync,
-            constant: constant
+            constant: constant,
+            identity: identity,
+            chainMany: chainMany,
+            composeMany: composeMany
         };
     };
 
