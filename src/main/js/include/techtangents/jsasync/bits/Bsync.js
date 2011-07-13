@@ -25,12 +25,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             };
         };
 
-        var bsync_ = function(f) {
-            return function() {
-                return bsync(f);
-            };
-        };
-
         /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f
          *  bsync(function(a, passCb, failCb){});
          */
@@ -139,6 +133,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
             return me;
         };
+
+        var bsync_ = Util.curry0(bsync);
 
         var syncer = function(pickCb) {
             return Util.compose(bsync)(function(f) {
