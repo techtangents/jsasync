@@ -72,9 +72,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
              */
             me.ap = me["<*>"] = bs(function(abc, a, passCb, failCb) {
                 me(a)(function(b) {
-                    abc(a)(function(bc) {
-                        passCb(bc(b));
-                    }, failCb);
+                    abc(a)(Util.compizzle(passCb)(b), failCb);
                 }, failCb);
             });
 
