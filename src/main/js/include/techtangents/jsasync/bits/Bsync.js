@@ -29,11 +29,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
          *  bsync(function(a, passCb, failCb){});
          */
         var bsync = function(f) {
-            var me = function(a) {
-                return Bfuture.bfuture(function(passCb, failCb) {
-                    f(a, passCb, failCb);
-                });
-            };
+            var me = Bfuture.bfut(f);
 
             /** compose :: Bsync b c f -> Bsync a b f -> Bsync a c f */
             var compose = function(bcf) {

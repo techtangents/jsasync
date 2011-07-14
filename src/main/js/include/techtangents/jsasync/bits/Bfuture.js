@@ -12,7 +12,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         var Either  = techtangents.jsasync.util.Either;
         var Util    = techtangents.jsasync.util.Util;
 
-        var bf = function(f) {
+        var bfut = function(f) {
             return function(x) {
                 return bfuture(function(passCb, failCb){
                     f(x, passCb, failCb);
@@ -27,14 +27,14 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
             var me = executor(f);
 
             /** this Bfuture a f -> (a -> b) -> Bfuture b f */
-            me.map = me["<$>"] = bf(function(mapper, passCb, failCb) {
+            me.map = me["<$>"] = bfut(function(mapper, passCb, failCb) {
                 me(Util.compose(passCb)(mapper), failCb);
             });
 
             /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
              *  Note: a Bsync a f is an (a -> Bfuture b f)
              */
-            me.bind = me[">>="] = bf(function(binder, passCb, failCb) {
+            me.bind = me[">>="] = bfut(function(binder, passCb, failCb) {
                 me(function(p) {
                     binder(p)(passCb, failCb);
                 }, failCb);
@@ -62,7 +62,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         /** Compose an array of futures.
          *  par :: [Bfuture p f] -> Bfuture [p] [Either p f]
          */
-        var par = bf(function(futures, passCb, failCb) {
+        var par = bfut(function(futures, passCb, failCb) {
             var feithers = Util.arrayMap(futures, toFutureEither);
             Future.par(feithers)(function(results) {
                 var goods = Either.goods(results);
@@ -75,7 +75,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         });
 
         var knst = function(picker) {
-            return bf(function(a, passCb, failCb) {
+            return bfut(function(a, passCb, failCb) {
                 picker(passCb, failCb)(a);
             });
         };
@@ -90,7 +90,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
             constant: constant,
             constantFail: constantFail,
             bfuture: bfuture,
-            par: par
+            par: par,
+            bfut: bfut
         };
     };
 

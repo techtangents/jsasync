@@ -20,23 +20,25 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
             /** (function application) :: this Future a -> (a => ()) -> () */
             var me = executor(f);
 
-            /** map/<$> :: this Future a -> (a -> b) -> Future b */
-            me.map = me["<$>"] = function(mapper) {
-                return future(function(callback) {
-                    me(Util.compose(callback)(mapper));
+            var futme = function(f) {
+                return fut(function(x, callback) {
+                    me(f(x, callback));
                 });
             };
+
+            /** map/<$> :: this Future a -> (a -> b) -> Future b */
+            me.map = me["<$>"] = futme(function(mapper, callback) {
+                return Util.compose(callback)(mapper);
+            });
 
             /** bind/>>= :: this Future a -> (a -> Future b) -> Future b
              *  Note: an Async is an (a -> Future b)
              */
-            me.bind = me[">>="] = function(aToFutureB) {
-                return future(function(callback) {
-                    me(function(a) {
-                        aToFutureB(a)(callback);
-                    });
-                });
-            };
+            me.bind = me[">>="] = futme(function(aToFutureB, callback) {
+                return function(a) {
+                    aToFutureB(a)(callback);
+                };
+            });
 
             /** bindAnon :: this Future a -> Future b -> Future b
              *  Note: (this Future a) is strict - it is evaluated and the result discarded.
@@ -45,6 +47,14 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
             me.bindAnon = me[">>"] = Util.compose(me.bind)(Util.konst);
 
             return me;
+        };
+
+        var fut = function(f) {
+            return function(x) {
+                return future(function(callback){
+                    f(x, callback);
+                });
+            };
         };
 
         /** constant :: a -> Future a */
@@ -74,7 +84,8 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
         return {
             future: future,
             constant: constant,
-            par: par
+            par: par,
+            fut: fut
         };
     };
 

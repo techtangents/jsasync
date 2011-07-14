@@ -23,11 +23,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
          *  Creates an Async from an asynchronous function(a, callback)
          */
         var async = function(f) {
-            var me = function(a) {
-                return Future.future(function(callback) {
-                    f(a, callback);
-                });
-            };
+            var me = Future.fut(f);
 
             /** mapIn/<<^ :: this Async b c -> (a -> b) -> Async a c */
             me.mapIn = me["<<^"] = ak(function(mapper, b, callback) {
