@@ -7,8 +7,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
          *  A Future is an augmented function and a monad
          */
 
-        var Util   = techtangents.jsasync.util.Util;
-        var Ticker = techtangents.jsasync.util.Ticker;
+        var j = techtangents.jsasync;
+        var Util   = j.util.Util;
+        var Ticker = j.util.Ticker;
 
         /** Creates a Future, given a function that takes a callback as its only argument.
          *

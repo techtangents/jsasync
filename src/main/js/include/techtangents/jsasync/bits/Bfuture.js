@@ -8,9 +8,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
          *  When the computation is complete, one of the callbacks is called, depdending on the result.
          */
 
-        var Bpicker = techtangents.jsasync.util.Bpicker;
-        var Either  = techtangents.jsasync.util.Either;
-        var Util    = techtangents.jsasync.util.Util;
+        var j = techtangents.jsasync;
+        var Bpicker = j.util.Bpicker;
+        var Either  = j.util.Either;
+        var Util    = j.util.Util;
 
         var bfut = Util.curry(function(f, x) {
             return bfuture(function(passCb, failCb){

@@ -1,9 +1,10 @@
 Ephox.core.module.define("techtangents.jsasync.api", [], function(api) {
 
-    var Library         = techtangents.jsasync.glue.Library;
-    var Util            = techtangents.jsasync.util.Util;
-    var Synchronization = techtangents.jsasync.util.Synchronization;
-    var Detective       = techtangents.jsasync.util.Detective;
+    var j               = techtangents.jsasync;
+    var Library         = j.glue.Library;
+    var Util            = j.util.Util;
+    var Synchronization = j.util.Synchronization;
+    var Detective       = j.util.Detective;
 
     var browser = Library.create(Synchronization.noSync);
     var rhino = Library.create(Synchronization.rhinoSync);

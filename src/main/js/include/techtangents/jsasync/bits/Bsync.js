@@ -11,11 +11,12 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
          *  Bsync a p f :: Bsync { apply :: (a, p -> (), f -> ()) -> () }
          */
 
-        var Util    = techtangents.jsasync.util.Util;
-        var Either  = techtangents.jsasync.util.Either;
-        var Bpicker = techtangents.jsasync.util.Bpicker;
+        var j       = techtangents.jsasync;
+        var Util    = j.util.Util;
+        var Either  = j.util.Either;
+        var Bpicker = j.util.Bpicker;
 
-        var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor, synchronizer);
+        var Bfuture = j.bits.Bfuture.create(executor, synchronizer);
 
         var bs = Util.curry(function(f, x) {
             return bsync(function(a, passCb, failCb){

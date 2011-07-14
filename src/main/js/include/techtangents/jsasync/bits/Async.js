@@ -6,10 +6,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
          *  An Async represents an asynchronous computation. It is an augmented function and forms an arrow.
          */
 
-        var Util    = techtangents.jsasync.util.Util;
-        var Bpicker = techtangents.jsasync.util.Bpicker;
-
-        var Future  = techtangents.jsasync.bits.Future.create(executor, synchronizer);
+        var j       = techtangents.jsasync;
+        var Util    = j.util.Util;
+        var Bpicker = j.util.Bpicker;
+        var Future  = j.bits.Future.create(executor, synchronizer);
 
         var ak = Util.curry(function(f, x) {
             return async(function(a, callback) {
