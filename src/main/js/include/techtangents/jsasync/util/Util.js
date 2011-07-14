@@ -2,6 +2,23 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
 
     // TODO: should we be using TheDLibrary here?
 
+    var curry0 = function(f) {
+        return function(a) {
+            return function() {
+                return f(a);
+            };
+        };
+    };
+
+    /** curry :: ((a -> b) -> c) -> a -> b -> c */
+    var curry = function(f) {
+        return function(a) {
+            return function(b) {
+                return f(a, b);
+            };
+        };
+    };
+
     /** flip :: (a -> b -> c) -> b -> a -> c */
     var flip = function(f) {
         return function(a) {
@@ -118,23 +135,6 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
             setTimeout(function() {
                 f.apply(thisArg, args);
             }, 1);
-        };
-    };
-
-    var curry0 = function(f) {
-        return function(a) {
-            return function() {
-                return f(a);
-            };
-        };
-    };
-
-    /** curry :: ((a -> b) -> c) -> a -> b -> c */
-    var curry = function(f) {
-        return function(a) {
-            return function(b) {
-                return f(a, b);
-            };
         };
     };
 
