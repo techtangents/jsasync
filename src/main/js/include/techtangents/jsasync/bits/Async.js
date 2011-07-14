@@ -11,13 +11,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
 
         var Future  = techtangents.jsasync.bits.Future.create(executor, synchronizer);
 
-        var ak = function(f) {
-            return function(x) {
-                return async(function(a, callback) {
-                    f(x, a, callback);
-                });
-            };
-        };
+        var ak = Util.curry(function(f, x) {
+            return async(function(a, callback) {
+                f(x, a, callback);
+            });
+        });
 
         /** async :: (a -> (b -> ()) -> a -> Async a b
          *  Creates an Async from an asynchronous function(a, callback)

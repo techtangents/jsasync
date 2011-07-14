@@ -20,15 +20,18 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     };
 
     /** curry3 :: ((a, b, c) -> d) -> a -> b -> c -> d*/
-    var curry3 = function(f) {
-        return function(a) {
-            return function(b) {
-                return function(c) {
-                    return f(a, b, c);
-                };
-            };
-        };
-    };
+    var curry3 = curry(function(f, a) {
+        return curry(function(b, c) {
+            return f(a, b, c);
+        });
+    });
+
+    /** curry4 :: ((a, b, c, d) -> e) -> a -> b -> c -> d -> e */
+    var curry4 = curry(function(f, a) {
+        return curry3(function(b, c, d) {
+            return f(a, b, c, d);
+        });
+    });
 
     /** flip :: (a -> b -> c) -> b -> a -> c */
     var flip = curry3(function(f, a, b) {
@@ -98,26 +101,16 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     };
 
     /** compose :: (b -> c) -> (a -> b) -> a -> c */
-    var compose = function(f) {
-        return function(g) {
-            return function(x) {
-                return f(g(x));
-            };
-        };
-    };
+    var compose = curry3(function(f, g, x) {
+        return f(g(x));
+    });
 
     /** flips arguments 2 and 3 of a 3 arg curried function
      *  flip23 :: (a -> b -> c -> d) -> a -> c -> b -> d
      */
-    var flip23 = function(f) {
-        return function(a) {
-            return function(c) {
-                return function(b) {
-                    return f(a)(b)(c);
-                };
-            };
-        };
-    };
+    var flip23 = curry4(function(f, a, c, b) {
+        return f(a)(b)(c);
+    });
 
     /** compizzle :: (b -> c) -> a -> (b -> c) -> a -> c */
     var compizzle = flip23(compose);
@@ -144,17 +137,13 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     };
 
     /** arrayFoldLeft :: [a] -> (a -> b) -> b -> b */
-    var arrayFoldLeft = function(array) {
-        return function(acc) {
-            return function(initial) {
-                var cur = initial;
-                for (var i = 0; i < array.length; i++) {
-                    cur = acc(cur, array[i]);
-                }
-                return cur;
-            }
+    var arrayFoldLeft = curry3(function(array, acc, initial) {
+        var cur = initial;
+        for (var i = 0; i < array.length; i++) {
+            cur = acc(cur, array[i]);
         }
-    };
+        return cur;
+    });
 
     var method = function(fnName) {
         return function(x, y) {
@@ -162,14 +151,10 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
-    var arrayFoldLeftOnMethod = function(fnName) {
-        return function(initial) {
-            return function(as) {
-                // TODO: validate input?
-                return arrayFoldLeft(as)(method(fnName))(initial);
-            };
-        };
-    };
+    var arrayFoldLeftOnMethod = curry3(function(fnName, initial, as) {
+        // TODO: validate input?
+        return arrayFoldLeft(as)(method(fnName))(initial);
+    });
 
     var hasAllProperties = function(o, props) {
         for (var i = 0; i < props.length; i++) {
