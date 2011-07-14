@@ -52,12 +52,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
             return me;
         };
 
-        var toFutureEither = function(fut) {
-            return Future.future(function(callback) {
-                var cb = Util.compose(callback);
-                fut(cb(Either.good), cb(Either.bad));
-            });
-        };
+        var toFutureEither = bfut(function(fut, callback) {
+            var cb = Util.compose(callback);
+            fut(cb(Either.good), cb(Either.bad));
+        });
 
         /** Compose an array of futures.
          *  par :: [Bfuture p f] -> Bfuture [p] [Either p f]
