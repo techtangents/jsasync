@@ -22,7 +22,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         /** bfuture :: ((p -> (), f -> ()) -> ()) -> Bfuture p f */
         var bfuture = function(f) {
 
-            // TODO: validate input?
             var me = executor(f);
 
             /** this Bfuture a f -> (a -> b) -> Bfuture b f */

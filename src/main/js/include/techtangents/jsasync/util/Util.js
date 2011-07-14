@@ -1,7 +1,5 @@
 Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
 
-    // TODO: should we be using TheDLibrary here?
-
     var curry0 = function(f) {
         return function(a) {
             return function() {
@@ -152,7 +150,6 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     };
 
     var arrayFoldLeftOnMethod = curry3(function(fnName, initial, as) {
-        // TODO: validate input?
         return arrayFoldLeft(as)(method(fnName))(initial);
     });
 
