@@ -161,7 +161,7 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         return function(initial) {
             return function(as) {
                 // TODO: validate input?
-                return arrayFoldLeft(as)(Util.method(fnName))(initial);
+                return arrayFoldLeft(as)(method(fnName))(initial);
             };
         };
     };
@@ -179,14 +179,12 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         return (function() { return this; })();
     };
 
-    var mapArgs = function(mapper) {
-        return function(f) {
-            return function() {
-                var margs = arrayMap(arguments, mapper);
-                return f.apply(this, margs);
-            };
+    var mapArgs = curry(function(mapper, f) {
+        return function() {
+            var margs = arrayMap(arguments, mapper);
+            return f.apply(this, margs);
         };
-    };
+    });
 
     api.global = global;
     api.hasAllProperties = hasAllProperties;
