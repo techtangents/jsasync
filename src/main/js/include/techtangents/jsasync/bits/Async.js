@@ -23,14 +23,30 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
         var async = function(f) {
             var me = Future.fut(f);
 
-            /** mapIn/<<^ :: this Async b c -> (a -> b) -> Async a c */
-            me.mapIn = me["<<^"] = ak(function(mapper, b, callback) {
-                me(mapper(b))(callback);
-            });
+            /** compose :: Async b c -> Async a b -> Async a c */
+            var compose = function(bc) {
+                return ak(function(ab, a, callback) {
+                    ab(a)(Util.flip(bc)(callback));
+                });
+            };
+
+            /** chain :: Async a b -> Async b c -> Async a c */
+            var chain = Util.flip(compose);
+
+            /** compose :: this Async b c -> Async a b -> Async a c */
+            me.compose = me["<<<"] = compose(me);
+
+            /** chain :: this Async a b -> Async b c -> Async a c */
+            me.chain = me[">>>"] = chain(me);
 
             /** map/>>^/<$> :: this Async a b -> (b -> c) -> Async a c */
             me.map = me[">>^"] = me["<$>"] = ak(function(mapper, a, callback) {
                 me(a)(Util.compose(callback)(mapper));
+            });
+
+            /** mapIn/<<^ :: this Async b c -> (a -> b) -> Async a c */
+            me.mapIn = me["<<^"] = ak(function(mapper, b, callback) {
+                me(mapper(b))(callback);
             });
 
             /** ap/<*> Async a b -> Async a (b -> c) -> Async a c */
@@ -53,22 +69,6 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
 
             /** toFailBsync :: this Async a f -> Bsync a p f */
             me.toFailBsync = toBsync(Bpicker.fail);
-
-            /** compose :: Async b c -> Async a b -> Async a c */
-            var compose = function(bc) {
-                return ak(function(ab, a, callback) {
-                    ab(a)(Util.flip(bc)(callback));
-                });
-            };
-
-            /** chain :: Async a b -> Async b c -> Async a c */
-            var chain = Util.flip(compose);
-
-            /** compose :: this Async b c -> Async a b -> Async a c */
-            me.compose = me["<<<"] = compose(me);
-
-            /** chain :: this Async a b -> Async b c -> Async a c */
-            me.chain = me[">>>"] = chain(me);
 
             /** Returns a Future that performs this Async over each element of the input array.
              *  amap :: this Async a b -> [a] -> Future [b]
