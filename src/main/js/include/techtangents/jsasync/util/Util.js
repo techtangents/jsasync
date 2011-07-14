@@ -129,6 +129,15 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
+    /** curry :: ((a -> b) -> c) -> a -> b -> c */
+    var curry = function(f) {
+        return function(a) {
+            return function(b) {
+                return f(a, b);
+            };
+        };
+    };
+
     /** arrayFoldLeft :: [a] -> (a -> b) -> b -> b */
     var arrayFoldLeft = function(array) {
         return function(acc) {
@@ -202,6 +211,7 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.chainConst = chainConst;
     api.bounce = bounce;
     api.curry0 = curry0;
+    api.curry = curry;
     api.method = method;
     api.mapArgs = mapArgs;
 });

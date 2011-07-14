@@ -17,13 +17,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
         var Bfuture = techtangents.jsasync.bits.Bfuture.create(executor, synchronizer);
 
-        var bs = function(f) {
-            return function(x) {
-                return bsync(function(a, passCb, failCb){
-                    f(x, a, passCb, failCb);
-                });
-            };
-        };
+        var bs = Util.curry(function(f, x) {
+            return bsync(function(a, passCb, failCb){
+                f(x, a, passCb, failCb);
+            });
+        });
 
         /** bsync :: (a, p -> (), f -> ()) -> () -> Bsync a p f
          *  bsync(function(a, passCb, failCb){});

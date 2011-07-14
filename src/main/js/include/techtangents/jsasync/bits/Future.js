@@ -49,13 +49,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
             return me;
         };
 
-        var fut = function(f) {
-            return function(x) {
-                return future(function(callback){
-                    f(x, callback);
-                });
-            };
-        };
+        var fut = Util.curry(function(f, x) {
+            return future(function(callback){
+                f(x, callback);
+            });
+        });
 
         /** constant :: a -> Future a */
         var constant = fut(function(x, callback) {

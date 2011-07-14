@@ -12,13 +12,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
         var Either  = techtangents.jsasync.util.Either;
         var Util    = techtangents.jsasync.util.Util;
 
-        var bfut = function(f) {
-            return function(x) {
-                return bfuture(function(passCb, failCb){
-                    f(x, passCb, failCb);
-                });
-            };
-        };
+        var bfut = Util.curry(function(f, x) {
+            return bfuture(function(passCb, failCb){
+                f(x, passCb, failCb);
+            });
+        });
 
         /** bfuture :: ((p -> (), f -> ()) -> ()) -> Bfuture p f */
         var bfuture = function(f) {
