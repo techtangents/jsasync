@@ -61,9 +61,12 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             me.mapFail = me["<!>"] = bs(function(mapper, a, passCb, failCb) {
                 me(a)(passCb, Util.compose(failCb)(mapper));
             });
-
+            
             /** biMap :: this Bsync a b b -> (b -> c) -> Bsync a c c */
-            // TODO
+            me.biMap = me["<**>"] = bs(function(mapper, a, passCb, failCb) {
+                var q = Util.chain(mapper);
+                Util.mapArgs(q)(me(a))(passCb, failCb);
+            });
 
             /** ap/<*> :: this Bsync a b f -> Bsync a (b -> c) f -> Bsync a c f
              *  Bsync * * f is an arrow, thus Bsync a * f is an applicative

@@ -9,6 +9,7 @@ var testMapPass = forEach3_(testFunctionsFromInt, testInts, testValues, function
     });
     checkBfPass(Bsync.constant(input).mapAsync(Bsync.sync(f))(dummy), expected);
     checkBfPass(Bsync.constant(input).biMapAsync(Async.sync(f))(dummy), expected);
+    checkBfPass(Bsync.constant(input).biMap(f)(dummy), expected);
 });
 
 var testMapFail = forEach2_(testInts, testValues, function(input, dummy) {
@@ -19,5 +20,6 @@ var testMapFail = forEach2_(testInts, testValues, function(input, dummy) {
 
     forEach(testFunctionsFromInt, function(f) {
         checkBfFail(Bsync.constantFail(input).biMapAsync(Async.sync(f))(dummy), f(input));
+        checkBfFail(Bsync.constantFail(input).biMap(f)(dummy), f(input));
     });
 });
