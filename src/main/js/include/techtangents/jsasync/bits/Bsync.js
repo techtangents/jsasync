@@ -71,15 +71,13 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             /** ap/<*> :: this Bsync a b f -> Bsync a (b -> c) f -> Bsync a c f
              *  Bsync * * f is an arrow, thus Bsync a * f is an applicative
              */
-            me.ap = me["<*>"] = function(abc) {
-                return bsync(function(a, passCb, failCb) {
-                    me(a)(function(b) {
-                        abc(a)(function(bc) {
-                            passCb(bc(b));
-                        }, failCb);
+            me.ap = me["<*>"] = bs(function(abc, a, passCb, failCb) {
+                me(a)(function(b) {
+                    abc(a)(function(bc) {
+                        passCb(bc(b));
                     }, failCb);
-                });
-            };
+                }, failCb);
+            });
 
             /** negate :: this Bsync a b f -> Bsync a f b */
             me.negate = bsync_(function(a, passCb, failCb) {
