@@ -10,7 +10,7 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
-    /** curry :: ((a -> b) -> c) -> a -> b -> c */
+    /** curry :: ((a, b) -> c) -> a -> b -> c */
     var curry = function(f) {
         return function(a) {
             return function(b) {
@@ -19,14 +19,21 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     };
 
-    /** flip :: (a -> b -> c) -> b -> a -> c */
-    var flip = function(f) {
+    /** curry3 :: ((a, b, c) -> d) -> a -> b -> c -> d*/
+    var curry3 = function(f) {
         return function(a) {
             return function(b) {
-                return f(b)(a);
+                return function(c) {
+                    return f(a, b, c);
+                };
             };
         };
     };
+
+    /** flip :: (a -> b -> c) -> b -> a -> c */
+    var flip = curry3(function(f, a, b) {
+        return f(b)(a);
+    });
 
     /** flipUncurried :: ((a, b) -> c) -> ((b, a) -> c) */
     var flipUncurried = function(f) {
@@ -43,11 +50,9 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     }
 
     /** konst :: a -> b -> a */
-    var konst = function(x) {
-        return function(_) {
-            return x;
-        };
-    };
+    var konst = curry(function(x, _) {
+        return x;
+    });
 
     /** arrayMap :: ([a], a -> b) -> [b] */
     var arrayMap = function(a, f) {
