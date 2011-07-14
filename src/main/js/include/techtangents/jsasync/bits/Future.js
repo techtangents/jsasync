@@ -58,11 +58,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Future", [], function(api) {
         };
 
         /** constant :: a -> Future a */
-        var constant = function(x) {
-            return future(function(callback) {
-                callback(x);
-            });
-        };
+        var constant = fut(function(x, callback) {
+            callback(x);
+        });
 
         /** Compose an array of futures.
          *  par :: [Future a] -> Future [a]
