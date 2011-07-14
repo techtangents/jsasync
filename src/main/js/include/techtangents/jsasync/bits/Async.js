@@ -45,11 +45,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             var toBsync = function(picker) {
                 // bind late to avoid infinite recursion
                 var Bsync = techtangents.jsasync.bits.Bsync.create(executor, synchronizer);
-                return function() {
-                    return Bsync.bsync(function(a, passCb, failCb) {
-                        me(a)(picker(passCb, failCb));
-                    });
-                };
+                return Bsync.bsync_(function(a, passCb, failCb) {
+                    me(a)(picker(passCb, failCb));
+                });
             };
 
             /** toPassBsync :: this Async a p -> Bsync a p f */
@@ -69,12 +67,10 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
             var chain = Util.flip(compose);
 
             /** compose :: this Async b c -> Async a b -> Async a c */
-            me.compose = compose(me);
-            me["<<<"] = me.compose;
+            me.compose = me["<<<"] = compose(me);
 
             /** chain :: this Async a b -> Async b c -> Async a c */
-            me.chain = chain(me);
-            me[">>>"] = me.chain;
+            me.chain = me[">>>"] = chain(me);
 
             /** Returns a Future that performs this Async over each element of the input array.
              *  amap :: this Async a b -> [a] -> Future [b]
@@ -88,11 +84,9 @@ Ephox.core.module.define("techtangents.jsasync.bits.Async", [], function(api) {
         };
 
         /** sync :: (a -> b) -> Async a b */
-        var sync = function(f) {
-            return async(function(a, callback) {
-                callback(f(a));
-            });
-        };
+        var sync = ak(function(f, a, callback) {
+            callback(f(a));
+        });
 
         /** identity :: Async a a */
         var identity = sync(Util.identity);

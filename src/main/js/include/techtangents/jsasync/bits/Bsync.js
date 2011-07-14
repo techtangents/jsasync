@@ -175,6 +175,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
 
         return {
             bsync: bsync,
+            bsync_: bsync_,
             sync: sync,
             syncFail: syncFail,
             identity: identity,
