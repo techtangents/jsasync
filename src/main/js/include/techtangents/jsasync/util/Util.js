@@ -170,6 +170,15 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         return (function() { return this; })();
     };
 
+    var mapArgs = function(mapper) {
+        return function(f) {
+            return function() {
+                var margs = arrayMap(arguments, mapper);
+                return f.apply(this, margs);
+            };
+        };
+    };
+
     api.global = global;
     api.hasAllProperties = hasAllProperties;
 
@@ -194,4 +203,5 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.bounce = bounce;
     api.curry0 = curry0;
     api.method = method;
+    api.mapArgs = mapArgs;
 });

@@ -120,7 +120,7 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bsync", [], function(api) {
             /** biMapAsync :: this Bsync a b b -> Async b c -> Bsync a c c */
             me.biMapAsync = bs(function(abb, a, passCb, failCb) {
                 var q = Util.flip(abb);
-                me(a)(q(passCb), q(failCb));
+                Util.mapArgs(q)(me(a))(passCb, failCb);
             });
 
             /** amap :: this Bsync a p f -> [a] -> Bfuture [p] (Either p f) */
