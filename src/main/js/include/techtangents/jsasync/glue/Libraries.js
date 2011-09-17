@@ -1,4 +1,4 @@
-Ephox.core.module.define("techtangents.jsasync.glue.libraries", [], function(api) {
+Ephox.core.module.define("techtangents.jsasync.glue.Libraries", [], function(api) {
 
     var j               = techtangents.jsasync;
     var Library         = j.glue.Library;
