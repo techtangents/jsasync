@@ -8,6 +8,13 @@ var dependencies = [
             { name: "json2.js", path: "lib/test"}
         ]
     },
+    { name: "jquery",
+        repository : "thirdpartyrepo",
+        source: "jquery.zip",
+        targets : [
+            { name: "jquery-1.6.2.js", path: "lib/test"}
+        ]
+    },
 
     { name: "jssert",
         repository: "buildrepo2",
