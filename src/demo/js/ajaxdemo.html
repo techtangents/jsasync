@@ -12,18 +12,7 @@
         function go() {
 
             var Bsync = techtangents.jsasync.api.auto.Bsync;
-
-            // FIX: move to jsasync itself
-            var ajax = Bsync.bsync(function(url, passCb, failCb) {
-                jQuery.ajax(url, {
-                    success: function(data, textStatus, jqXHR) {
-                        passCb({data: data, textStatus: textStatus, jqXHR: jqXHR});
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        failCb({jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
-                    }
-                });
-            });
+            var ajax = techtangents.jsasync.api.auto.Jquery.ajax;
 
             var getDataProperty = function(jqSuccessObject) {
                 return jqSuccessObject.data;
@@ -36,7 +25,7 @@
             var urls = ["text1.txt", "text2.txt"];
 
             // FIX: not working at the moment... prints "undefined"
-            ajax.amap(urls).map(getDataProperty).map(addStuff)(console.log, console.log);
+            ajax.map(getDataProperty).map(addStuff).amap(urls)(console.log, console.log);
 
         };
 

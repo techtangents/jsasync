@@ -8,7 +8,8 @@ Ephox.core.module.define("techtangents.jsasync.glue.Library", [], function(api) 
             Async: base.Async,
             Future: base.Future,
             Bsync: base.Bsync,
-            Bfuture: base.Bfuture
+            Bfuture: base.Bfuture,
+            Jquery: techtangents.jsasync.jquery.Jquery
         };
 
         return Util.objectMap(bits, function(bit) {

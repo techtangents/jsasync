@@ -12,6 +12,8 @@ Ephox.core.include.require("jsasync", [
     "include/techtangents/jsasync/bits/Bfuture.js",
     "include/techtangents/jsasync/bits/Bsync.js",
 
+    "include/techtangents/jsasync/jquery/Jquery.js",
+
     "include/techtangents/jsasync/glue/Library.js",
     "include/techtangents/jsasync/glue/Libraries.js",
     "include/techtangents/jsasync/api.js"
