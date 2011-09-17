@@ -30,6 +30,11 @@ Ephox.core.module.define("techtangents.jsasync.bits.Bfuture", [], function(api, 
                 me(Util.compose(passCb)(mapper), failCb);
             });
 
+            /** this Bfuture a f -> (f -> g) -> Bfuture a g */
+            me.mapFail = me["<!>"] = bfut(function(mapper, passCb, failCb) {
+                me(passCb, Util.compose(failCb)(mapper));
+            });
+
             /** this Bfuture a f -> (a -> Bfuture b f) -> Bfuture b f
              *  Note: a Bsync a f is an (a -> Bfuture b f)
              */

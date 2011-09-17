@@ -173,6 +173,8 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     });
 
+    var noop = function(){};
+
     api.global = global;
     api.hasAllProperties = hasAllProperties;
 
@@ -199,4 +201,6 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
     api.curry = curry;
     api.method = method;
     api.mapArgs = mapArgs;
+
+    api.noop = noop;
 });

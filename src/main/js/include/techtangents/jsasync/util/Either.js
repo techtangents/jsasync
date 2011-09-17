@@ -15,9 +15,13 @@ Ephox.core.module.define("techtangents.jsasync.util.Either", [], function(api, _
                 return good(mapper(g));
             },
             isGood : Util.konst(true),
+            isBad  : Util.konst(false),
             goodOrDie: Util.konst(g),
             badOrDie: function() {
                 throw "badOrDie called on Either.good";
+            },
+            each: function(f) {
+                f(g);
             }
         };
     };
@@ -31,10 +35,12 @@ Ephox.core.module.define("techtangents.jsasync.util.Either", [], function(api, _
                 return bad(b);
             },
             isGood: Util.konst(false),
+            isBad : Util.konst(true),
             goodOrDie: function() {
                 throw "goodOrDie called on Either.bad"
             },
-            badOrDie: Util.konst(b)
+            badOrDie: Util.konst(b),
+            each: Util.noop
         };
     };
 
@@ -44,18 +50,27 @@ Ephox.core.module.define("techtangents.jsasync.util.Either", [], function(api, _
         };
     };
 
-    /** goods :: [Either good bad] -> [good] */
-    var goods = function(es) {
-        var goodEithers = Util.arrayFilter(es, function(e) {
-            return e.isGood();
-        });
-        return Util.arrayMap(goodEithers, function(e) {
-            return e.goodOrDie();
-        });
+    var split = function(filter, getter) {
+        return function(es) {
+            return Util.arrayMap(Util.arrayFilter(es, filter), getter);
+        };
     };
+
+    /** goods :: [Either good bad] -> [good] */
+    var goods = split(
+        function(e) { return e.isGood();    },
+        function(e) { return e.goodOrDie(); }
+    );
+
+    /** bads :: [Either good bad] -> [bad] */
+    var bads = split(
+        function(e) { return e.isBad();    },
+        function(e) { return e.badOrDie(); }
+    );
 
     api.good = good;
     api.bad = bad;
     api.foldOn = foldOn;
     api.goods = goods;
+    api.bads = bads;
 });

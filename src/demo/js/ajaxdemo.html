@@ -8,11 +8,10 @@
     <script type="text/javascript" src="../../../src/main/js/jsasync.js"></script>
 
     <script type="text/javascript">
-
         function go() {
-
-            var Bsync = techtangents.jsasync.api.auto.Bsync;
             var ajax = techtangents.jsasync.api.auto.Jquery.ajax;
+            var Either = techtangents.jsasync.util.Either;
+            var Util = techtangents.jsasync.util.Util;
 
             var getDataProperty = function(jqSuccessObject) {
                 return jqSuccessObject.data;
@@ -22,11 +21,39 @@
                 return "some stuff: " + x;
             };
 
-            var urls = ["text1.txt", "text2.txt"];
+            // ------------------------------------------------------------------------------------
+            // all of these pass, resulting in: ["some stuff: text 1", "some stuff: text 2"]
+            var passUrls = ["text1.txt", "text2.txt"];
+            ajax.map(getDataProperty).map(addStuff).amap(passUrls)(console.log, console.log);
 
-            // FIX: not working at the moment... prints "undefined"
-            ajax.map(getDataProperty).map(addStuff).amap(urls)(console.log, console.log);
 
+            // ------------------------------------------------------------------------------------
+            // some of these fail, so we get an array of Eithers logged
+            var mixedUrls = ["text1.txt", "notfound.txt", "text2.txt"];
+            var runMixed = ajax.map(getDataProperty).map(addStuff).amap(mixedUrls);
+            runMixed(console.log, console.log);
+
+
+            // ------------------------------------------------------------------------------------
+            // this gets all of the passing ones above:
+            runMixed.mapFail(Either.goods)(console.log, console.log);
+
+
+            // ------------------------------------------------------------------------------------
+            // this gets all of the failing ones above:
+            runMixed.mapFail(Either.bads)(console.log, console.log);
+        
+
+            // ------------------------------------------------------------------------------------
+            // this gets the error codes of the failing ones:
+            var getErrorCode = function(jqFailObject) {
+                return jqFailObject.jqXHR.status;
+            };
+            var getErrorCodes = function(failArray) {
+                return Util.arrayMap(failArray, getErrorCode);
+            };
+            runMixed.mapFail(Either.bads).mapFail(getErrorCodes)(console.log, console.log);
+                    
         };
 
     </script>
