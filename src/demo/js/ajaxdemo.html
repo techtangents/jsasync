@@ -6,8 +6,43 @@
     <script type="text/javascript" src="../../../lib/test/jquery-1.6.2.js"></script>
     <script type="text/javascript" src="../../../lib/run/javascriptcore.js"></script>
     <script type="text/javascript" src="../../../src/main/js/jsasync.js"></script>
+
+    <script type="text/javascript">
+
+        function go() {
+
+            var Bsync = techtangents.jsasync.api.auto.Bsync;
+
+            // FIX: move to jsasync itself
+            var ajax = Bsync.bsync(function(url, passCb, failCb) {
+                jQuery.ajax(url, {
+                    success: function(data, textStatus, jqXHR) {
+                        passCb({data: data, textStatus: textStatus, jqXHR: jqXHR});
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        failCb({jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
+                    }
+                });
+            });
+
+            var getDataProperty = function(jqSuccessObject) {
+                return jqSuccessObject.data;
+            };
+
+            var addStuff = function(x) {
+                return "some stuff: " + x;
+            };
+
+            var urls = ["text1.txt", "text2.txt"];
+
+            // FIX: not working at the moment... prints "undefined"
+            ajax.amap(urls).map(getDataProperty).map(addStuff)(console.log, console.log);
+
+        };
+
+    </script>
 </head>
 <body>
-
+    <button type="button" onclick="go();">go!</button>
 </body>
 </html>
