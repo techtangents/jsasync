@@ -73,13 +73,33 @@
         }
 
         function go6() {
-
-            // ------------------------------------------------------------------------------------
             // ajaxSimple just gets a Bfuture of the response text (pass) or a friendly error message (fail)
             ajaxSimple("text1.txt")(console.log, console.log);
             ajaxSimple("notfound.txt")(console.log, console.log);
 
         };
+
+        function go7() {
+            // downloads text1 and downloads text2 sequentially if text1 succeeds.
+            // in this case, it passes
+            ajaxSimple("text1")[">>"](ajaxSimple("text2"))(console.log, console.log);
+        }
+
+        function go8() {
+            // same as above, but the first one fails
+            ajaxSimple("notfound")[">>"](ajaxSimple("text2"))(console.log, console.log);
+        }
+
+        function go9() {
+            // downloads "theurl.txt", which contains a url of the next file to download
+            ajaxSimple("theurl.txt")[">>="](ajaxSimple)(console.log, console.log);
+        }
+
+        function go10() {
+            // doesn't exist
+            ajaxSimple("notfound")[">>="](ajaxSimple)(console.log, console.log);
+            ajaxSimple("thebrokenurl.txt")[">>="](ajaxSimple)(console.log, console.log);
+        }
 
     </script>
 </head>
@@ -90,5 +110,10 @@
     <button type="button" onclick="go4();">go4!</button>
     <button type="button" onclick="go5();">go5!</button>
     <button type="button" onclick="go6();">go6!</button>
+    <button type="button" onclick="go7();">go7!</button>
+    <button type="button" onclick="go8();">go8!</button>
+    <button type="button" onclick="go9();">go9!</button>
+    <button type="button" onclick="go10();">go10!</button>
 </body>
 </html>
+    
