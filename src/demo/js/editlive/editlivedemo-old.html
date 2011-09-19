@@ -1,0 +1,38 @@
+<html>
+<head>
+    <script type="text/javascript" src="../../../../lib/run/javascriptcore.js"></script>
+    <script type="text/javascript" src="../../../../src/main/js/jsasync.js"></script>
+    <script type="text/javascript" src="/editlivejava/editlivejava.js"></script>
+    <script type="text/javascript" src="../../../../lib/test/jquery-1.6.2.js"></script>
+
+    <script type="text/javascript">
+        var openElj = function(content, callback) {
+            var elj = new EditLiveJava("elj1", "100%", "100%");
+            elj.setDocument(content);
+            elj.setOnInitComplete(EditLiveJava.CallbackManager.register(callback));
+            elj.showInElement("container");
+        };
+
+        var loaded = function() {
+            console.log("loaded");
+        };
+
+        var go = function() {
+            jQuery.ajax({
+                success: function(jqSuccess) {
+                    openElj(jqSuccess.data, loaded);
+                },
+                error: console.log
+            });
+        };
+
+    </script>
+</head>
+<body>
+
+<button type="button" onclick="go();">go</button>
+
+<div id="container" style="width:500px;height:500px;border:2px solid #cadbee;"></div>
+
+</body>
+</html>

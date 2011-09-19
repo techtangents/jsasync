@@ -16,12 +16,14 @@
             elj.showInElement("container");
         });
 
-        var loaded = function(){
+        var loaded = function() {
             console.log("loaded");
         };
 
         var go = function() {
-            ajaxSimple.mapAsync(openElj)("content.txt")(loaded, console.log);
+            // these two are equivalent...
+            // ajaxSimple.mapAsync(openElj)("content.txt")(loaded, console.log);
+            ajaxSimple("content.txt")[">>="](openElj)(loaded, console.log);
         };
 
     </script>
