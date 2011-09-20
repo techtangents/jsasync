@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="../../../../lib/run/javascriptcore.js"></script>
+    <script type="text/javascript" src="../../../../src/main/js/jsasync.js"></script>
+
+    <script type="text/javascript">
+
+        var compose = techtangents.jsasync.util.Util.compose;
+        var async   = techtangents.jsasync.api.auto.Async.async;
+        var curry = techtangents.jsasync.util.Util.curry;
+
+        var Loader = (function() {
+
+            var globieId = 0;
+
+            var regGlobie = function(f) {
+                var x = globieId + 1;
+                Loader.globies[x] = function() {
+                    Loader.globies[x] = undefined;
+                    f();
+                };
+                return "Loader.globies[" + x + "]";
+            };
+
+            var makeScriptTag = function(code) {
+                var t = document.createElement("script");
+                t.innerHTML = code;
+                return t;
+            };
+
+            var appendBodyChild = function(x) {
+                document.body.appendChild(x);
+            };
+
+            var insertScriptTag = compose(appendBodyChild)(makeScriptTag);
+
+            /** loadCode :: Async String () */
+            var loadCode = async(function(code, callback) {
+                insertScriptTag(code + ";\n" + regGlobie(callback) + "();");
+            });
+
+            return {
+                loadCode: loadCode,
+                globies:  {}
+            };
+        })();
+
+        function go1() {
+            // loads code and calls the callback when done
+
+            var loaded = curry(console.log)("loaded");
+            Loader.loadCode("console.log('running script');")(loaded);
+        };
+
+    </script>
+</head>
+<body>
+
+    <button type="button" onclick="go1();">go1</button>
+
+</body>
+</html>
