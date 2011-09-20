@@ -3,14 +3,17 @@
 <html>
 <head>
     <title></title>
+
+    <script type="text/javascript" src="../../../../lib/test/jquery-1.6.2.js"></script>
     <script type="text/javascript" src="../../../../lib/run/javascriptcore.js"></script>
     <script type="text/javascript" src="../../../../src/main/js/jsasync.js"></script>
 
     <script type="text/javascript">
 
-        var compose = techtangents.jsasync.util.Util.compose;
-        var async   = techtangents.jsasync.api.auto.Async.async;
-        var curry = techtangents.jsasync.util.Util.curry;
+        var compose          = techtangents.jsasync.util.Util.compose;
+        var async            = techtangents.jsasync.api.auto.Async.async;
+        var ajaxFullSimple   = techtangents.jsasync.api.auto.Jquery.ajaxFullSimple;
+        var curry            = techtangents.jsasync.util.Util.curry;
 
         var Loader = (function() {
 
@@ -53,13 +56,27 @@
 
             var loaded = curry(console.log)("loaded");
             Loader.loadCode("console.log('running script');")(loaded);
-        };
+        }
+
+        function go2() {
+            // loads code from a file. dataType: text is to stop stupid jquery eval'ing it.
+
+            var file   = "somecode.js";
+            var logger = curry(console.log)
+            var loaded = logger("loaded");
+            var fail   = logger("fail");
+
+            var loadFromFile = ajaxFullSimple({dataType: "text"}).mapAsync(Loader.loadCode);
+
+            loadFromFile(file)(loaded, fail);
+        }
 
     </script>
 </head>
 <body>
 
     <button type="button" onclick="go1();">go1</button>
+    <button type="button" onclick="go2();">go2</button>
 
 </body>
 </html>

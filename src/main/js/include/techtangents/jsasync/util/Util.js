@@ -173,6 +173,16 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         };
     });
 
+    var objectMerge = function(/* objects... */) {
+        var r = {};
+        arrayEach(arguments, function(obj) {
+            objectEach(obj, function(x, i) {
+                r[i] = x;
+            });
+        });
+        return r;
+    };
+
     var noop = function(){};
 
     api.global = global;
@@ -194,6 +204,8 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
 
     api.objectEach = objectEach;
     api.objectMap = objectMap;
+    api.objectMerge = objectMerge;
+
     api.identity = identity;
     api.chainConst = chainConst;
     api.bounce = bounce;
