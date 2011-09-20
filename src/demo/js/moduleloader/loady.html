@@ -45,11 +45,19 @@
                 insertScriptTag(code + ";\n" + regGlobie(callback) + "();");
             });
 
+            /** dataType: text is to stop stupid jquery eval'ing it. */
+            var loadFromFile = ajaxFullSimple({dataType: "text"}).mapAsync(loadCode);
+
             return {
                 loadCode: loadCode,
+                loadFromFile: loadFromFile,
                 globies:  {}
             };
         })();
+
+        var logger = curry(console.log)
+        var loaded = logger("loaded");
+        var fail   = logger("fail");
 
         function go1() {
             // loads code and calls the callback when done
@@ -59,16 +67,15 @@
         }
 
         function go2() {
-            // loads code from a file. dataType: text is to stop stupid jquery eval'ing it.
+            // loads code from a file.
+            Loader.loadFromFile("somecode.js")(loaded, fail);
+        }
 
-            var file   = "somecode.js";
-            var logger = curry(console.log)
-            var loaded = logger("loaded");
-            var fail   = logger("fail");
+        function go3() {
+            // loads code from 3 files in parallel, then loads a third file that depends on them
+            var loadFromFile = Loader.loadFromFile;
 
-            var loadFromFile = ajaxFullSimple({dataType: "text"}).mapAsync(Loader.loadCode);
-
-            loadFromFile(file)(loaded, fail);
+            loadFromFile.amap(["a.js", "b.js", "c.js"])[">>"](loadFromFile("dependent.js"))(loaded, fail);
         }
 
     </script>
@@ -77,6 +84,7 @@
 
     <button type="button" onclick="go1();">go1</button>
     <button type="button" onclick="go2();">go2</button>
+    <button type="button" onclick="go3();">go3</button>
 
 </body>
 </html>
