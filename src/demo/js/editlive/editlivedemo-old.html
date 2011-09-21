@@ -18,7 +18,7 @@
         };
 
         var go = function() {
-            jQuery.ajax({
+            jQuery.ajax("content.txt", {
                 success: function(jqSuccess) {
                     openElj(jqSuccess.data, loaded);
                 },
