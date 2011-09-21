@@ -110,7 +110,7 @@ Ephox.core.module.define("techtangents.jsasync.util.Util", [], function(api) {
         return f(a)(b)(c);
     });
 
-    /** compizzle :: (b -> c) -> a -> (b -> c) -> a -> c */
+    /** compizzle :: ((b -> c) -> a) -> (b -> c) -> a -> c */
     var compizzle = flip23(compose);
 
     /** chain :: (a -> b) -> (b -> c) -> a -> c */
