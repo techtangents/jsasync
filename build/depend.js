@@ -10,6 +10,7 @@ var dependencies = [
     },
     { name: "jquery",
         repository : "thirdpartyrepo",
+	version: "1.6.2/1.6.2.0",
         source: "jquery.zip",
         targets : [
             { name: "jquery-1.6.2.js", path: "lib/test"}
